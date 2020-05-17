@@ -6,16 +6,39 @@ import AccountPage from './AccountPage'
 import { Route, Redirect } from 'react-router-dom'
 import AboutPage from './AboutPage'
 import PhotosPage from './PhotosPage'
+import { updatePassword } from '../../../auth/Login/Register/authActions'
+import { connect } from 'react-redux'
+import { updateProfile } from '../UserDetailed/userActions'
 
-export const SettingsDashboard = () => {
+
+
+
+const mapDispatchToProps={
+    updateProfile,
+    updatePassword
+}
+
+const mapStateToProps= state=>({
+    user: state.firebase.profile
+})
+
+
+export const SettingsDashboard = ({updatePassword,user,updateProfile}) => {
     return (
         <Grid>
             <Grid.Column width ={10}>
-                <Redirect exact from='/settings' to='/settings/basic'/>
-                <Route path='/settings/basic' component={BasicPage}/>
-                <Route path='/settings/about' component={AboutPage}/>
+                {/* <Redirect exact from='/settings' to='/settings/basic'/> */}
+                <Route path='/settings/basic'
+                 render={()=> <BasicPage initialValues={user} updateProfile={updateProfile}/>}// passing down the initial values as the user name in firestore
+                 />
+                <Route path='/settings/about' 
+                render={()=> <AboutPage initialValues={user} updateProfile={updateProfile}/>}
+                />
+                
                 <Route path='/settings/photos' component={PhotosPage}/>
-                <Route path='/settings/account' component={AccountPage}/>
+                <Route path='/settings/account' 
+                render={()=> <AccountPage updatePassword={updatePassword}/>}
+                />
             </Grid.Column>
             <Grid.Column width ={3}>
                 <SettingsNav/>
@@ -23,4 +46,4 @@ export const SettingsDashboard = () => {
         </Grid>
     )
 }
-export default SettingsDashboard
+export default connect(mapStateToProps, mapDispatchToProps)(SettingsDashboard)

@@ -1,11 +1,26 @@
-import React from 'react'
+import React, { Component } from 'react'
+import { connect } from 'react-redux';
+import FeedList from '../FeedList';
+import LoadingComponent from '../../../../layout/LoadingComponent';
 
-export const FeedDashboard = () => {
+
+const mapStateToProps = (state) => ({
+    photos: state.photos,
+    loading: state.async.loading,
+  });
+  
+
+class FeedDashboard extends Component {
+    
+
+    render(){
+        
+        const { photos, loading } = this.props;
+        if (loading) return <LoadingComponent />
     return (
-        <div>
-            <h1>Feed dashboard </h1>
-            
-        </div>
+        
+            <FeedList photos={photos}/>
     )
 }
-export default FeedDashboard;
+}
+export default connect (mapStateToProps) (FeedDashboard);
