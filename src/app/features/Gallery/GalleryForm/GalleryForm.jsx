@@ -19,8 +19,7 @@ import {
 } from "revalidate";
 import dateInput from "../../../common/form/dateInput";
 import { withFirestore } from "react-redux-firebase";
-// import uploadInput from "../../../common/form/uploadInput";
-import { uploadProfileImage } from "../user/Settings/Photos/uploadActions";
+import { uploadProfileImage2 } from "../user/Settings/Photos/uploadActions";
 
 // import { storage } from "../../../config/firebase";
 
@@ -39,7 +38,7 @@ const mapStateToPropsData = (state, ownProps) => {
 const mapDispatchToProps = {
   createPhoto,
   updatePhoto,
-  uploadProfileImage
+  uploadProfileImage2
   
 };
 
@@ -67,9 +66,9 @@ const validate = combineValidators({
 });
 
 class GalleryForm extends Component {
-  // state={
-  //   selectedFile:null
-  // }
+  state={
+    selectedFile:null
+  }
 
   
   // state={ ...this.props.photo }
@@ -91,9 +90,12 @@ class GalleryForm extends Component {
   //   }
   // }
 
-  // handleUpload = async (file)=>{
+  handleUpload = async (file)=>{
+    this.setState({
+      selectedFile:file.target.files[0]
+    })
 
-  // }
+  }
   
 
   handleFormSubmit = async (values) => {
@@ -105,8 +107,7 @@ class GalleryForm extends Component {
 
       } else {
         let createdPhoto = await this.props.createPhoto(values);
-        // console.log(this.state.selectedFile)
-        // await this.props.uploadProfileImage(this.state.selectedFile)
+         await this.props.uploadProfileImage2(this.state.selectedFile,createdPhoto.id)
         this.props.history.push(`/gallery/${createdPhoto.id}`);
         
       }
@@ -193,14 +194,13 @@ class GalleryForm extends Component {
           /> */}
           {/* start segment */}
 
-          {/* <Segment>
+          <Segment>
           
 
-          <input type="file" onChange={handleChange} />
-          <button onClick={handleUpload}>Upload</button>
+          <input type="file" onChange={this.handleUpload}/>
             
          
-          </Segment> */}
+          </Segment>
 
           <Button
             disabled={invalid || pristine || submitting}

@@ -11,7 +11,7 @@ class GalleryListItem extends Component {
     return (
       <div>
         <Segment.Group>
-          <Image src={photo.photoURL} as='a' size='medium' target='_blank' />
+          <Image src={photo.PhotoURL} as='a' size='medium' target='_blank' />
 
           <Segment>
             {/* <span>

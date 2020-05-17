@@ -45,6 +45,39 @@ export const uploadProfileImage = (file, fileName) =>
         }
     }
 
+    export const uploadProfileImage2 = (file, fileName) => 
+    
+    async (dispatch, getState, {getFirebase, getFirestore}) => {
+        const imageName = cuid();
+        const firebase = getFirebase();
+        const firestore = getFirestore();
+        const user = firebase.auth().currentUser;
+        const path = `${user.uid}/user_gallery`; //the path where people will store their own image 
+        const options = {
+            name: fileName
+
+            
+        };
+        try {
+            dispatch(asyncStart())
+            // upload the file to firebase storage
+            let uploadedFile = await firebase.uploadFile(path, file, null, options)
+            // get url of image
+            let downloadURL = await uploadedFile.uploadTaskSnapshot.ref.getDownloadURL();
+            // get userdoc
+          
+            // add the image to firestore
+            await firestore.set(`photos/${fileName}`,{
+                PhotoURL: downloadURL
+            },{ merge: true })
+            dispatch(asyncFinish())
+        } catch (error) {
+            console.log(error)
+            dispatch(asyncError())
+        }
+    }
+
+
 export const deletePhoto = (photo) =>
     async (dispatch, getState, {getFirebase, getFirestore}) => {
         const firebase = getFirebase();

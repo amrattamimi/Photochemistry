@@ -8,7 +8,7 @@ import { objectToArray } from '../../../common/utils/helpers';
     return (
            <Segment.Group>
               <Segment basic attached="top" style={{ padding: '0' }}>
-                <Image src={`${photo.photoURL}`} fluid />
+                <Image src={`${photo.PhotoURL}`} fluid />
         
                 <Segment basic>
                   <Item.Group>

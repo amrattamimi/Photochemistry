@@ -1,3 +1,4 @@
+import { CREATE_PHOTO,DELETE_PHOTO,UPDATE_PHOTO, LIKE_PHOTO } from "./galleryConstants"
 import { toastr } from "react-redux-toastr"
 import { createNewPhoto } from "./helper"
 
@@ -55,7 +56,7 @@ export const updatePhoto =photo=>{
     
         try{
             await firestore.update(`photos/${photo.id}`, photo);
-            toastr.success("update completed")
+            toastr.success("update  completed")
 
         }catch(error){
             toastr.error("there was an error ")
