@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Segment, Image, Button, Header, List, Grid, Container, Item } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 import LikedByList from '../galleryList/LikedByList'
+import { objectToArray } from '../../../common/utils/helpers'
 
 export class FeedListItem extends Component {
   
@@ -13,7 +14,7 @@ export class FeedListItem extends Component {
                  <Segment.Group>
               <Image
                 
-                src={photo.photoURL}
+                src={photo.PhotoURL}
                 as='a'
                 size='large'
                 
@@ -32,9 +33,12 @@ export class FeedListItem extends Component {
               </Segment>
               <Item.Meta>Courtesy of: {photo.takenBy}</Item.Meta>
               
-              <span> {photo.likedBy.length} likes</span>
+              <span> {photo.likedBy && objectToArray(photo.likedBy).length}
+      {photo.likedBy && objectToArray(photo.likedBy).length === 1
+        ? " Person likes this photo"
+        : " People like this photo"}</span>
                 <List horizontal>
-                  {photo.likedBy && photo.likedBy.map(likedBy=>(
+                  {photo.likedBy && objectToArray(photo.likedBy).map(likedBy=>(
                     <LikedByList key={likedBy.id} likedBy={likedBy}/>
                   ))}
                 </List>

@@ -1,26 +1,50 @@
 import React, { Component, Fragment } from "react";
-import { Grid, Button, Menu } from "semantic-ui-react";
-import GalleryList from "../galleryList/GalleryList";
-import cuid from "cuid";
-import { connect } from "react-redux";
-import { deletePhoto } from "../../Gallery/galleryList/galleryActions";
-import { Link } from "react-router-dom";
+import { getFirebase, firestoreConnect } from "react-redux-firebase";
 import LoadingComponent from "../../../layout/LoadingComponent";
+import { Menu, Grid, Button, Loader } from "semantic-ui-react";
+import GalleryList from "../galleryList/GalleryList";
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import GalleryGroupDashboard from "./GalleryGroupDashboard";
-import { firestoreConnect,isLoaded } from "react-redux-firebase";
 
 const mapStateToProps = (state) => ({
-  photos: state.firestore.ordered.photos,
+  photos: state.photos,
+  loading: state.async.loading,
+  auth: state.firebase.auth,
 });
-
-const mapDispatchTopProps = {
-  deletePhoto,
-};
 
 class GalleryDashboard extends Component {
   state = {
+    photos: [],
     openBar: "gallery",
   };
+
+  async componentDidMount() {
+    console.log(this.props.auth.uid);
+
+    
+    const firebase = getFirebase();
+    const user = this.props.auth.uid;
+    const firestore = firebase.firestore();
+    const photoQuery = firestore
+      .collection("photos")
+      .where("takenByUid", "==", user)
+      .orderBy("created", "desc");
+    console.log(photoQuery);
+    let querySnap = await photoQuery.get();
+    console.log(querySnap);
+
+    let photos = [];
+
+    for (let i = 0; i < querySnap.docs.length; i++) {
+      let photo = { ...querySnap.docs[i].data(), id: querySnap.docs[i].id };
+      photos.push(photo);
+    }
+    this.setState({
+      photos: photos,
+    });
+  }
+
   handleGallery = () => {
     this.setState({
       openBar: "gallery",
@@ -32,17 +56,10 @@ class GalleryDashboard extends Component {
     });
   };
 
-  handleCreatePhoto = (newPhoto) => {
-    newPhoto.id = cuid();
-    newPhoto.photoURL =
-      "http://2.bp.blogspot.com/-f7EUxANsah4/V5--A7KJ05I/AAAAAAAAAQg/sOhGYaEbEncYa04-_wkOl8mAzdPtSBS5wCK4B/s1600/moerae%2B%2Bs.jpg";
-    this.props.createPhoto(newPhoto);
-  };
-
   render() {
-    const { photos, loading } = this.props;
-    const { openBar } = this.state;
-    if (!isLoaded(photos)) return <LoadingComponent />;
+    const { loading } = this.props;
+    const { photos, openBar } = this.state;
+    if (this.state.loadingInitial) return <LoadingComponent />;
     return (
       <Fragment>
         <Menu style={{ padding: "20px" }} tabular>
@@ -59,16 +76,29 @@ class GalleryDashboard extends Component {
           />
         </Menu>
 
-        <Grid>
-          {openBar === "gallery" && <GalleryList photos={photos} />}
+        <Grid width={10}>
+          {openBar === "gallery" && (
+            <GalleryList
+              photos={photos}
+              getNextPhotos={this.getNextPhotos}
+              loading={loading}
+            />
+          )}
           {openBar === "group" && <GalleryGroupDashboard />}
         </Grid>
-        <Button as={Link} to={"/createPost"} content='create' />
+        <Loader active={loading} />
+        <Button
+          size='massive'
+          floated='right'
+          as={Link}
+          to={"/createPost"}
+          content='Create a new post'
+        />
       </Fragment>
     );
   }
 }
-export default connect(
-  mapStateToProps,
-  mapDispatchTopProps
-)(firestoreConnect([{ collection: "photos" }])(GalleryDashboard));
+export default connect(mapStateToProps)(
+  firestoreConnect([{ collection: "photos" }])(GalleryDashboard)
+);
+

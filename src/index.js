@@ -9,6 +9,7 @@ import { configureStore } from './app/store/configureStore';
 import ScrollToTop from './app/common/utils/ScrollToTop';
 import ReduxToastr from 'react-redux-toastr';
 import 'react-redux-toastr/lib/css/react-redux-toastr.min.css'
+import { getUserGallery } from './app/features/Gallery/user/UserDetailed/userActions';
 
 
 const store = configureStore();

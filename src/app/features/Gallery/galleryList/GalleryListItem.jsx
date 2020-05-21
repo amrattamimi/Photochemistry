@@ -1,25 +1,67 @@
 import React, { Component } from "react";
-import { Segment, Image, List, Button } from "semantic-ui-react";
+import { Segment, Image, List, Button, Icon, Grid, Card, GridColumn } from "semantic-ui-react";
 
 import LikedByList from "./LikedByList";
 import { Link } from "react-router-dom";
 import { objectToArray } from "../../../common/utils/helpers";
+import { format } from "date-fns";
 
 class GalleryListItem extends Component {
   render() {
     const { photo } = this.props;
     return (
       <div>
-        <Segment.Group>
-          <Image src={photo.PhotoURL} as='a' size='medium' target='_blank' />
+        <Card
+    image={photo.PhotoURL}
+    header={<Segment
+      vertical
+      as={Link}
+      to={`/gallery/${photo.id}`}
+      style={{ color: "black", fontSize: "1.5em", fontWeight: "bold" }}
+    >
+      {photo.title}
+    </Segment>}
+    meta={<p>
+      <GridColumn
+        as={Link}
+        to={`/profile/${photo.takenByUid}`}
+        style={{ color: "black", paddingTop: "20px" }}
+      >
+        Photography by : {photo.takenBy}
+      </GridColumn>
+      
+    </p>}
+    description=''
+    extra=  { <span>
+                
+      {photo.likedBy && objectToArray(photo.likedBy).length}
+      {photo.likedBy && objectToArray(photo.likedBy).length === 1
+        ? " Person likes this photo"
+        : " People like this photo"}
+    
+              
+                  <Button
+              as={Link}
+              to={`/gallery/${photo.id}`}
+              content='View'
+              floated='right'
+            ></Button>
+              </span> }
+    
+  />
+
+
+
+
+          {/* <Image src={photo.PhotoURL} as='a' size='large' target='_blank' />
 
           <Segment>
-            {/* <span>
+            <span>
               <Icon name="clock"/>
               {format(photo.date.toDate(), 'EEEE do LLLL')} at {' '}
               {format(photo.date.toDate(), 'h:mm a')} |
 
-            </span> */}
+            </span>
             <Button
               as={Link}
               to={`/gallery/${photo.id}`}
@@ -61,8 +103,8 @@ class GalleryListItem extends Component {
                   ))}
               </List>
             </Segment>
-          </Segment>
-        </Segment.Group>
+          </Segment> */}
+      
       </div>
     );
   }
