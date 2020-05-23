@@ -9,7 +9,7 @@ import UserDetailedHeader from './UserDetailedHeader';
 import UserDetailedPhotos from './UserDetailedPhotos';
 import UserDetailedSidebar from './UserDetailedSidebar';
 import LoadingComponent from '../../../../layout/LoadingComponent';
-import { getUserFavs,followUser,unfollowUser } from './userActions';
+import { followUser,unfollowUser } from './userActions';
 
 // const query = ({auth}) => {
 //   return [
@@ -69,7 +69,6 @@ const mapState = (state, ownProps) => {
 }
 
 const mapDispatchToProps ={
-  getUserFavs,
   followUser,
   unfollowUser
 

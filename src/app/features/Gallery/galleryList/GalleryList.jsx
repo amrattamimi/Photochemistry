@@ -11,14 +11,8 @@ import InfiniteScroll from 'react-infinite-scroller';
            // checking if there are photos, looping through photos array and passing down each photo to Gallery List Item.
                    
            
-               <Fragment>
-               {/* {photos && photos.length !== 0 &&
-             <InfiniteScroll
-               pageStart={0}
-               loadMore={getNextPhotos}
-               hasMore={!loading && morePhotos}
-               initialLoad={false} */}
-             >
+               <Fragment >
+            
            {photos && photos.map(photo => (
              <GalleryListItem
                key={photo.id}
@@ -26,7 +20,6 @@ import InfiniteScroll from 'react-infinite-scroller';
                selectPhoto={selectPhoto}
              />
            ))
-            //  </InfiniteScroll>
            }
    
            </Fragment>

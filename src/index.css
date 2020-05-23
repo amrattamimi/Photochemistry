@@ -29,7 +29,7 @@ timepicker style
   background-image: linear-gradient(
     to bottom right,
      #649fcc,
-     #4d7b9e
+     #fafa
   ) !important;
   height: 100vh;
 } 
@@ -66,18 +66,16 @@ timepicker style
 
 /* navbar styles */
 
-.ui.menu .item img.logo {
-  margin-right: 1.5em;
-} 
 
-.ui.fixed.menu {
+
+/* .ui.fixed.menu {
   background-image: linear-gradient(
           to bottom right,
            #649fcc,
-           #4d7b9e
+           #fafa
   ) !important;
   
-}
+} */
 
 
 /* image gallery  */
@@ -88,13 +86,13 @@ timepicker style
 
 .ui.main.container,
 .main.segment.center {
-  margin: auto;
+  /* margin: auto; */
   margin-top: 8em;
 }
 
-.ui.center.aligned.segment.attendance-preview {
-  background-color: #f5f5f5;
-}
+/* .ui.center.aligned.segment.attendance-preview {
+  background-color: #fafa;
+} */
 
 .masthead .ui.menu .ui.button,
 .ui.menu a.ui.inverted.button {
@@ -110,16 +108,18 @@ timepicker style
 }
 
 /*chat comments*/
-
 .ui.comments .comment .comments {
-  padding-bottom: 0 !important;
-  padding-left: 2em !important;
+  padding-bottom: 3em !important;
+  padding-left: 4em !important;
+}
+
+#root > div.ui.container.main > div > div{
+  margin-bottom: 1em;
 }
 
 /* dropzone styles */
 .dropzone {
   border: dashed 3px #eee;
-  border-radius: 5px;
   padding-top: 30px;
   text-align: center;
   /* min-height: 236px; */

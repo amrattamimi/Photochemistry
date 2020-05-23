@@ -17,39 +17,7 @@ export const updateProfile = (user) =>
     }
 
 
-    export const getUserFavs = (userUid, activeTab) => async (
-        dispatch,
-        getState
-      ) => {
-        dispatch(asyncStart());
-        const firestore = firebase.firestore()
-        const today = new Date(Date.now());
-        let photosRef = firestore.collection('likedBy');
-        let query = photosRef
-              .where('userUid', '==', userUid)
-              .orderBy('photoDate', 'desc');
-          
-        try {
-          let querySnap = await query.get();
-          let favs = [];
-
-          for (let i = 0; i < querySnap.docs.length; i++) {
-            let photo = await firestore
-              .collection('photos')
-              .doc(querySnap.docs[i].data().photoId)
-              .get();
-            favs.push({ ...photo.data(), id: photo.id });
-          }
-          console.log(favs)
-      
-          dispatch({type: FETCH, payload: {favs}})
-      
-          dispatch(asyncStart());
-        } catch (error) {
-          console.log(error);
-          dispatch(asyncError());
-        }
-      };
+  
 
 
       export const followUser = userToFollow => async (dispatch, getState,{getFirestore}) =>{
@@ -61,7 +29,7 @@ export const updateProfile = (user) =>
           displayName: userToFollow.displayName
         }
         try{
-          await firestore.set(
+          await firestore.set( //creating a new directory in users file with the following information 
             {
               collection:'users',
               doc: user.uid,

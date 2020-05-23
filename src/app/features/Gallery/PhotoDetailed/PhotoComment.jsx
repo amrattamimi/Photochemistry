@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Segment, Header, Comment } from 'semantic-ui-react';
-import PhotoDetailedChatForm from './PhotoDetailedChatForm';
+import PhotoDetailedCommentForm from './PhotoDetailedChatForm';
 import { formatDistance } from 'date-fns';
 import { Link } from 'react-router-dom';
 
@@ -33,10 +33,10 @@ class PhotoComment extends Component {
           textAlign='center'
           attached='top'
           inverted
-          color='teal'
+          color='#649fcc'
           style={{ border: 'none' }}
         >
-          <Header>Chat about this photo</Header>
+          <Header>Comments </Header>
         </Segment>
 
         <Segment attached>
@@ -45,14 +45,14 @@ class PhotoComment extends Component {
               photoChat.map(comment => (
                 <Comment key={comment.id}>
                   <Comment.Avatar
-                    src={comment.PhotoURL || '/assets/user.png'}
+                    src={comment.photoURL || '/assets/user.png'}
                   />
                   <Comment.Content>
                     <Comment.Author as={Link} to={`/profile/${comment.uid}`}>
                       {comment.displayName}
                     </Comment.Author>
                     <Comment.Metadata>
-                      {/* <div>{formatDistance(comment.date, Date.now())} ago</div> */}
+                      <div>{formatDistance(comment.date, Date.now())} ago</div>
                     </Comment.Metadata>
                     <Comment.Text>{comment.text}</Comment.Text>
                     <Comment.Actions>
@@ -62,7 +62,7 @@ class PhotoComment extends Component {
                         Reply
                       </Comment.Action>
                       {showReplyForm && selectedCommentId === comment.id && (
-                        <PhotoDetailedChatForm
+                        <PhotoDetailedCommentForm
                           addPhotoComment={addPhotoComment}
                           photoId={photoId}
                           form={`reply_${comment.id}`}
@@ -101,7 +101,7 @@ class PhotoComment extends Component {
                               </Comment.Action>
                               {showReplyForm &&
                                 selectedCommentId === child.id && (
-                                  <PhotoDetailedChatForm
+                                  <PhotoDetailedCommentForm
                                     addPhotoComment={addPhotoComment}
                                     photoId={photoId}
                                     form={`reply_${child.id}`}
@@ -117,7 +117,7 @@ class PhotoComment extends Component {
                 </Comment>
               ))}
           </Comment.Group>
-          <PhotoDetailedChatForm
+          <PhotoDetailedCommentForm
             addPhotoComment={addPhotoComment}
             photoId={photoId}
             form={'newComment'}

@@ -73,11 +73,20 @@ export const likePhoto = (photo) => {
       liked: true,
       photoURL: profile.photoURL || "https://via.placeholder.com/150",
       displayName: profile.displayName,
+      likerid: user.uid
     };
     try {
       await fireStore.update(`photos/${photo.id}`, {
         [`likedBy.${user.uid}`]: likedBy,
       });
+  
+        
+        await fireStore.set(`favs/${user.uid}`, {
+          photoId: photo.id,
+          userId: user.uid
+        });
+
+    
       await fireStore.set(`photo_likedBy/${photo.id}_${user.id}`, {
         photoId: photo.id,
         userUid: user.uid,
@@ -111,32 +120,7 @@ export const unlike = (photo) => {
   };
 };
 
-// export const getPhotosForFeed=()=>
-//     async(dispatch,getState)=>{
-//         let today= new Date();
-//         const firestore= firebase.firestore();
-//         const photosQuery= firestore.collection('photos').where('date', '<=', today);
-//         console.log(photosQuery)
 
-//     try{
-//         dispatch(asyncStart())
-//         let querySnap = await photosQuery.get()
-//         console.log(querySnap)
-//         let photos=[];
-
-//         for (let i =0; i < querySnap.docs.length; i++ ){
-//         let photo ={...querySnap.docs[i].data(), id:querySnap.docs[i].id};
-//         photos.push(photo)
-//         }
-//         dispatch({type: FETCH_EVENTS, payload:{photos}})
-//         dispatch(asyncFinish())
-
-//     }catch(error){
-
-//         dispatch(asyncError())
-
-//     }
-// }
 
 export const getPhotosForFeed = (lastPhoto) => async (dispatch, getState) => {
   let today = new Date(Date.now());
@@ -182,18 +166,17 @@ export const getPhotosForFeed = (lastPhoto) => async (dispatch, getState) => {
   }
 };
 
-// export const getPhotosForGallery = () => async (dispatch, getState) => {
-//   let today = new Date(Date.now());
+// export const getPhotosForGallery = (user) => async (dispatch, getState) => {
 //   const firestore = firebase.firestore();
-//   const photoQuery = firestore.collection('photos').where("created", "<=", today);
-//   console.log(photoQuery)
+//   const photoQuery = firestore
+//       .collection("photos")
+//       .where("takenByUid", "==", user)
+//       .orderBy("created", "desc");
+// try{    
+//   dispatch(asyncStart());
 
-//   try {
-//     dispatch(asyncStart)
-   
-
-//     let querySnap = await photoQuery.get();
-//     console.log(querySnap)
+//   let querySnap = await photoQuery.get();
+//     console.log(querySnap);
 
 //     let photos = [];
 
@@ -202,15 +185,14 @@ export const getPhotosForFeed = (lastPhoto) => async (dispatch, getState) => {
 //       photos.push(photo);
 //     }
 //     console.log(photos)
-//     return photos;
 //     dispatch({ type: FETCH, payload: { photos } });
 //     dispatch(asyncFinish());
-//     return photos;
 //   } catch (error) {
 //     console.log(error);
 //     dispatch(asyncError());
 //   }
-// };
+
+// }
 
 
 export const addPhotoComment = (photoId, values, parentId) =>
@@ -234,23 +216,26 @@ export const addPhotoComment = (photoId, values, parentId) =>
     }
   }
 
-  // export const addEventComment = (eventId, values, parentId) =>
-  // async (dispatch, getState, {getFirebase}) => {
-  //   const firebase = getFirebase();
-  //   const profile = getState().firebase.profile;
-  //   const user = firebase.auth().currentUser;
-  //   let newComment = {
-  //     parentId: parentId,
-  //     displayName: profile.displayName,
-  //     photoURL: profile.photoURL || '/assets/user.png',
-  //     uid: user.uid,
-  //     text: values.comment,
-  //     date: Date.now()
-  //   }
-  //   try {
-  //     await firebase.push(`event_chat/${eventId}`, newComment);
-  //   } catch (error) {
-  //     console.log(error)
-  //     toastr.error('Oops', 'Problem adding comment')
-  //   }
-  // }
+  export const fav = getFav => async (dispatch, getState,{getFirestore}) =>{
+    const firestore= getFirestore();
+    const user = firestore.auth().currentUser;
+    const favourites= {
+      PhotoURL: getFav.PhotoURL || '/assets/user.png',
+      title: getFav.title ||'Unknown title',
+      displayName: getFav.created
+    }
+    try{
+      await firestore.set( //creating a new directory in users file with the following information
+        {
+          collection:'users',
+          doc: user.uid,
+          subcollections: [{collection: 'favs', doc: fav.id }]
+        },
+        favourites
+
+      );
+
+    }catch (error){
+      console.log(error)
+    }
+  }

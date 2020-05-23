@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { Form, Button } from 'semantic-ui-react';
-import {Field, reduxForm, reset} from 'redux-form'
+import {Field, reduxForm} from 'redux-form'
 import textDescription from '../../../common/form/textDescription';
 
-class PhotoDetailedChatForm extends Component {
+class PhotoDetailedCommentForm extends Component {
     handleCommentSubmit = values => {
         const {addPhotoComment, reset, photoId, closeForm, parentId} = this.props;
         addPhotoComment(photoId, values, parentId);
@@ -18,7 +18,6 @@ class PhotoDetailedChatForm extends Component {
           <Field name='comment' type='text' component={textDescription} rows={2}/>
           <Button
             content='Add Reply'
-            labelPosition='left'
             icon='edit'
             primary
           />
@@ -27,4 +26,4 @@ class PhotoDetailedChatForm extends Component {
   }
 }
 
-export default reduxForm({Fields: 'comment'})(PhotoDetailedChatForm)
+export default reduxForm({Fields: 'comment'})(PhotoDetailedCommentForm)

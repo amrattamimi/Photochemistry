@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import FeedList from '../FeedList';
 import LoadingComponent from '../../../../layout/LoadingComponent';
@@ -10,8 +10,7 @@ import { Loader, GridColumn, Grid } from 'semantic-ui-react';
 const mapStateToProps = (state) => ({
     photos: state.photos,
     loading:state.async.loading,
-    // userUid:ownProps.match.params.id,
-      auth: state.firebase.auth
+    auth: state.firebase.auth
 
   });
   
@@ -70,15 +69,15 @@ class FeedDashboard extends Component {
     return (
 
         <Grid>
-           <Grid.Column width={10}>
+           <GridColumn width={10}>
             <FeedList photos={loadedPhotos} getNextPhotos={this.getNextPhotos} morePhotos={morePhotos} loading={loading}/>
 
             
-            </Grid.Column>
-            <Grid.Column width={10}>
+            </GridColumn>
+            <GridColumn width={10}>
             <Loader active={loading} />
 
-            </Grid.Column>
+            </GridColumn>
             </Grid>
     )
 }

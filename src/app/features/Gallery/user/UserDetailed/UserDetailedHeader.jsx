@@ -1,6 +1,5 @@
 import React from 'react';
-import { Grid, Header, Item, Segment, Placeholder } from 'semantic-ui-react';
-import differenceInYears from 'date-fns/differenceInYears'
+import { Grid, Header, Item, Segment } from 'semantic-ui-react';
 import LazyLoad from 'react-lazyload';
 
 const UserDetailedHeader = ({ profile }) => {

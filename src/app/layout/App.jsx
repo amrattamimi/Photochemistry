@@ -13,7 +13,6 @@ import FeedDashboard from '../features/Gallery/feed/FeedDashboard/FeedDashboard'
 import NetworkDashboard from '../features/Gallery/network/NetworkDashboard/NetworkDashboard';
 import test from '../features/testArea/test';
 import ModalManager from '../features/modals/ModalManager';
-import GalleryGroupDashboard from '../features/Gallery/GalleryDashboard/GalleryGroupDashboard';
 
 
 

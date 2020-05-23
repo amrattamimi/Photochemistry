@@ -1,57 +1,59 @@
-import React, { Component } from 'react'
-import { Segment, Image, Button, Header, List, Grid, Container, Item } from 'semantic-ui-react'
-import { Link } from 'react-router-dom'
-import LikedByList from '../galleryList/LikedByList'
-import { objectToArray } from '../../../common/utils/helpers'
+import React, { Component } from "react";
+import { Segment, Button, Card, GridColumn } from "semantic-ui-react";
+import { Link } from "react-router-dom";
+import { objectToArray } from "../../../common/utils/helpers";
+import { format } from "date-fns";
 
 export class FeedListItem extends Component {
-  
-
-    render() {
-        const {photo}=this.props
-        return ( <div>
-             <Grid>
-                 <Segment.Group>
-              <Image
-                
-                src={photo.PhotoURL}
-                as='a'
-                size='large'
-                
-                target='_blank'
-              fluid />
-              
-              <Segment >
-              <Button 
-              as={Link} 
+  render() {
+    const { photo } = this.props;
+    return (
+      <div style={{ padding: "20px", textAlign: "center" }}>
+        <Card
+          fluid
+          style={{ textAlign: "center", padding: "20px" }}
+          image={photo.PhotoURL}
+          header={
+            <Segment
+              vertical
+              as={Link}
               to={`/gallery/${photo.id}`}
-              content="View"
-              floated="right">
-              </Button>
-              <Segment vertical >
-              <Header as='h3'>{photo.title}</Header>
-              </Segment>
-              <Item.Meta>Courtesy of: {photo.takenBy}</Item.Meta>
+              style={{ color: "black", fontSize: "1.5em", fontWeight: "bold" }}
+            >
+              {photo.title}
+            </Segment>
+          }
+          meta={
+            <p>
+              <GridColumn
+                as={Link}
+                to={`/profile/${photo.takenByUid}`}
+                style={{ color: "black", paddingTop: "20px" }}
+              >
+                Photography by : {photo.takenBy}
+              </GridColumn>
+            </p>
+          }
+          description=''
+          extra={
+            <span>
               
-              <span> {photo.likedBy && objectToArray(photo.likedBy).length}
-      {photo.likedBy && objectToArray(photo.likedBy).length === 1
-        ? " Person likes this photo"
-        : " People like this photo"}</span>
-                <List horizontal>
-                  {photo.likedBy && objectToArray(photo.likedBy).map(likedBy=>(
-                    <LikedByList key={likedBy.id} likedBy={likedBy}/>
-                  ))}
-                </List>
-                
-                 
-                {/* <Button as='a' color='teal' floated='right' content='View' /> */}
-              </Segment>
-              </Segment.Group>
-              </Grid>
-              
-          </div>
-        )
-    }
+              <br />
+              Photo uploaded :
+              {photo.created &&
+                format(photo.created.toDate(), "EEEE do LLLL yyy")}
+              <Button
+                as={Link}
+                to={`/gallery/${photo.id}`}
+                content='View'
+                floated='right'
+              ></Button>
+            </span>
+          }
+        />
+      </div>
+    );
+  }
 }
 
-export default FeedListItem
+export default FeedListItem;

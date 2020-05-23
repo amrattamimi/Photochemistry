@@ -1,17 +1,14 @@
-import React, {Component} from 'react';
-import {Modal} from 'semantic-ui-react';
-import {connect} from 'react-redux';
-
-import {closeModal} from "./modalActions"
-import RegisterForm from "../auth/Login/Register/RegisterForm"
-
-
+import React, { Component } from 'react'
+import { Modal } from 'semantic-ui-react';
+import { connect } from 'react-redux';
+import {closeModal} from "../../modals/modalActions"
+ 
 const mapStateToProps = {closeModal};
-
-class RegisterModal extends Component {
+ class favList extends Component {
     render() {
         return (
-            <Modal
+            <div>
+                 <Modal
                 size='mini'
                 open={true}
                 onClose={this.props.closeModal}
@@ -21,12 +18,14 @@ class RegisterModal extends Component {
                 </Modal.Header>
                 <Modal.Content>
                     <Modal.Description>
-                        <RegisterForm />
+                        <p>hey girl </p>
                     </Modal.Description>
                 </Modal.Content>
             </Modal>
-        );
+                
+            </div>
+        )
     }
 }
 
-export default connect(null, mapStateToProps)(RegisterModal);
+export default connect(null, mapStateToProps)(favList)

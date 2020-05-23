@@ -6,8 +6,8 @@ import { Link } from 'react-router-dom'
     return (
           <Menu.Item position="right">
             <Image avatar spaced="right" src={profile.photoURL ||'/assets/user.png'} />
-            <Dropdown pointing="top left" text={profile.displayName}>
-              <Dropdown.Menu>
+            <Dropdown style={{marginRight:"60px"}} pointing="top left" text={profile.displayName}>
+              <Dropdown.Menu style={{ padding:"20px"}}>
                 <Dropdown.Item text="Create Event" icon="plus" />
                 <Dropdown.Item text="My Events" icon="calendar" />
                 <Dropdown.Item text="My Network" icon="users" />

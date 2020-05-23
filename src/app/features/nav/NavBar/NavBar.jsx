@@ -49,17 +49,18 @@ class NavBar extends Component {
       <Menu  inverted fixed='top'>
         <Container>
           <Menu.Item as={NavLink} exact to='/'header>
-            <img src='assets/logo.png' alt='logo' />
+          
             <Menu.Item>PhotoChemistry</Menu.Item>
             
           </Menu.Item>
           <Menu.Item as={NavLink} to='/feed'name='Feed' />
-          <Menu.Item as={NavLink} to='/gallery'name='Gallery' />
-          <Menu.Item as={NavLink} to='/network'name='Network' />
-          <Menu.Item as={NavLink} to='/test'name='Test' />
+         { authenticated && <Menu.Item as={NavLink} to='/gallery'name='Gallery' />}
+          {authenticated && <Menu.Item as={NavLink} to='/network'name='Network' />}
        
         {authenticated? (
-         <SignedIn signOut={this.handleSignedOut} auth={auth} profile={profile}/> ):
+         <SignedIn signOut={this.handleSignedOut} auth={auth} profile={profile}/>
+         
+         ):
         (<SignedOut signIn={this.handleSignedIn} register={this.handleRegister}/>)}
         </Container>
       </Menu>

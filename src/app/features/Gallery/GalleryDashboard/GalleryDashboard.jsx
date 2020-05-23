@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import GalleryGroupDashboard from "./GalleryGroupDashboard";
 
 const mapStateToProps = (state) => ({
-  photos: state.photos,
+  photos: [],
   loading: state.async.loading,
   auth: state.firebase.auth,
 });
@@ -21,18 +21,17 @@ class GalleryDashboard extends Component {
 
   async componentDidMount() {
     console.log(this.props.auth.uid);
-
-    
     const firebase = getFirebase();
     const user = this.props.auth.uid;
     const firestore = firebase.firestore();
+    if(user!=null){
     const photoQuery = firestore
       .collection("photos")
+      // .where('liker',"array-contains",user)
+      
       .where("takenByUid", "==", user)
       .orderBy("created", "desc");
-    console.log(photoQuery);
     let querySnap = await photoQuery.get();
-    console.log(querySnap);
 
     let photos = [];
 
@@ -43,6 +42,7 @@ class GalleryDashboard extends Component {
     this.setState({
       photos: photos,
     });
+  }
   }
 
   handleGallery = () => {
@@ -89,7 +89,8 @@ class GalleryDashboard extends Component {
         <Loader active={loading} />
         <Button
           size='massive'
-          floated='right'
+          color="instagram"
+          floated="right"
           as={Link}
           to={"/createPost"}
           content='Create a new post'
@@ -98,7 +99,9 @@ class GalleryDashboard extends Component {
     );
   }
 }
-export default connect(mapStateToProps)(
-  firestoreConnect([{ collection: "photos" }])(GalleryDashboard)
-);
+export default connect(mapStateToProps)(GalleryDashboard)
+;
+
+// (
+//   firestoreConnect([{ collection: "photos" }])
 
