@@ -3,7 +3,7 @@ import {  Grid } from 'semantic-ui-react'
 import SettingsNav from './SettingsNav'
 import BasicPage from './BasicPage'
 import AccountPage from './AccountPage'
-import { Route, Redirect } from 'react-router-dom'
+import { Route } from 'react-router-dom'
 import AboutPage from './AboutPage'
 import PhotosPage from './PhotosPage'
 import { updatePassword } from '../../../auth/Login/Register/authActions'
@@ -26,6 +26,9 @@ const mapStateToProps= state=>({
 export const SettingsDashboard = ({updatePassword,user,updateProfile}) => {
     return (
         <Grid>
+            <Grid.Column width ={3}>
+                <SettingsNav/>
+            </Grid.Column>
             <Grid.Column width ={10}>
                 {/* <Redirect exact from='/settings' to='/settings/basic'/> */}
                 <Route path='/settings/basic'
@@ -40,9 +43,7 @@ export const SettingsDashboard = ({updatePassword,user,updateProfile}) => {
                 render={()=> <AccountPage updatePassword={updatePassword}/>}
                 />
             </Grid.Column>
-            <Grid.Column width ={3}>
-                <SettingsNav/>
-            </Grid.Column>
+            
         </Grid>
     )
 }

@@ -4,23 +4,13 @@ import { firestoreConnect, isEmpty } from 'react-redux-firebase';
 import { compose } from 'redux'
 import { Grid } from 'semantic-ui-react';
 import UserDetailedDescription from './UserDetailedDescription';
-import UserDetailedFavs from './UserDetailedPage';
 import UserDetailedHeader from './UserDetailedHeader';
 import UserDetailedPhotos from './UserDetailedPhotos';
 import UserDetailedSidebar from './UserDetailedSidebar';
 import LoadingComponent from '../../../../layout/LoadingComponent';
 import { followUser,unfollowUser } from './userActions';
 
-// const query = ({auth}) => {
-//   return [
-//     {
-//       collection: 'users',
-//       doc: auth.uid,
-//       subcollections: [{collection: 'photos'}],
-//       storeAs: 'photos'
-//     }
-//   ]
-// }
+
 
 const query =({auth, userUid, match }) => {
   if (userUid !== null) {
@@ -37,7 +27,7 @@ const query =({auth, userUid, match }) => {
         storeAs: 'photos'
       },
       {
-        //query to check the user we clicked on if they have a document in following 
+        //query to check if there is a following user by matching the user ID with the document name 
         collection:'users',
         doc: auth.uid,
         subcollections:[{collection:'following', doc: match.params.id}],
@@ -48,7 +38,7 @@ const query =({auth, userUid, match }) => {
   }
 };
 
-const mapState = (state, ownProps) => {
+const mapStateToProps = (state, ownProps) => {
   let userUid = null;
   let profile = {};
 
@@ -57,8 +47,6 @@ const mapState = (state, ownProps) => {
   
 
   return {
-    favs: state.favs,
-    favsLoading:state.async.loading,
     profile,
     userUid,
     auth: state.firebase.auth,
@@ -68,26 +56,20 @@ const mapState = (state, ownProps) => {
   }
 }
 
-const mapDispatchToProps ={
+const mapDispatchToProps ={ // pass down follow and unfollow actions as props 
   followUser,
   unfollowUser
 
 }
 
-// const mapState = (state) => ({
-//   profile: state.firebase.profile,
-//   auth: state.firebase.auth,
-//   photos: state.firestore.ordered.photos
-// })
 
 class UserDetailedPage extends Component {
 
   async componentDidMount(){
-    let photos = await this.props.getUserFavs(this.props.userUid)
-    console.log(photos)
+   
   }
   render() {
-    const {profile, photos,auth,match,requesting,favs,favsLoading,followUser,following,unfollowUser} = this.props;    
+    const {profile, photos,auth,match,requesting,followUser,following,unfollowUser} = this.props;    
     const isOwner= auth.uid===match.params.id;
     const loading = Object.values(requesting).some(a=>a ===true); //if anything in the requesting object is true we will load  
     const isFollowing= !isEmpty(following); //check is following empty or not 
@@ -107,6 +89,6 @@ class UserDetailedPage extends Component {
 }
 //passing the mat
 export default compose(
-  connect(mapState,mapDispatchToProps),
+  connect(mapStateToProps,mapDispatchToProps),
   firestoreConnect((auth, userUid, match) => query(auth,userUid, match))
 )(UserDetailedPage);

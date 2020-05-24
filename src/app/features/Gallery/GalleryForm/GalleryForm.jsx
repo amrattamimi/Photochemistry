@@ -1,16 +1,8 @@
-
-
-
 import React, { Component } from "react";
-import {
-  Form,
-  Segment,
-  Button,
-  Header
-} from "semantic-ui-react";
+import { Form, Segment, Button, Header } from "semantic-ui-react";
 import { connect } from "react-redux";
 import { createPhoto, updatePhoto } from "../galleryList/galleryActions";
-import {  Field, reduxForm } from "redux-form";
+import { Field, reduxForm } from "redux-form";
 import textInput from "../../../common/form/textInput";
 import textDescription from "../../../common/form/textDescription";
 import selectIput from "../../../common/form/selectIput";
@@ -19,10 +11,10 @@ import {
   isRequired,
   composeValidators,
   hasLengthGreaterThan,
+  isNumeric,
 } from "revalidate";
-import dateInput from "../../../common/form/dateInput";
 import { withFirestore } from "react-redux-firebase";
-import { uploadProfileImage2 } from "../user/Settings/Photos/uploadActions";
+import { uploadPostPhoto } from "../user/Settings/Photos/uploadActions";
 
 // import { storage } from "../../../config/firebase";
 
@@ -30,8 +22,14 @@ const mapStateToPropsData = (state, ownProps) => {
   const photoID = ownProps.match.params.id;
 
   let photo = {};
-  if(state.firestore.ordered.photos && state.firestore.ordered.photos.length>0){
-    photo= state.firestore.ordered.photos.filter(photo=> photo.id===photoID)[0] ||{};
+  if (
+    state.firestore.ordered.photos &&
+    state.firestore.ordered.photos.length > 0
+  ) {
+    photo =
+      state.firestore.ordered.photos.filter(
+        (photo) => photo.id === photoID
+      )[0] || {};
   }
   return {
     initialValues: photo,
@@ -41,19 +39,17 @@ const mapStateToPropsData = (state, ownProps) => {
 const mapDispatchToProps = {
   createPhoto,
   updatePhoto,
-  uploadProfileImage2
-  
+  uploadPostPhoto,
 };
 
-
-
-
 const category = [
+  // categories available
   { key: "contemporary", text: "Contemporary", value: "contemporary" },
   { key: "minimalistic", text: "Minimalistic", value: "minimalistic" },
   { key: "classic", text: "Classic", value: "classic" },
   { key: "black&white", text: "Black & White", value: "black & white" },
   { key: "postModern", text: "Post Modern", value: "post modern" },
+  { key: "other", text: "Other", value: "other" },
 ];
 
 const validate = combineValidators({
@@ -64,79 +60,47 @@ const validate = combineValidators({
     hasLengthGreaterThan(4)({ message: "description is too short" })
   )(),
   location: isRequired({ message: "the city is required" }),
-  editions: isRequired("venue"),
-  date: isRequired({ message: "date is required" }),
+  editions: composeValidators(
+    isRequired("editions"),
+    isNumeric({ message: "this should be a number" })
+  )(),
 });
 
 class GalleryForm extends Component {
-  state={
-    selectedFile:null
-  }
+  state = {
+    selectedFile: null,
+  };
 
-  
-  // state={ ...this.props.photo }
-
-  // componentDidMount(){
-  //   if(this.props.selectedPhoto !==null){
-  //     this.setState({
-  //       ...this.props.selectedPhoto
-  //     })
-  //   }
-
-  // }
-
-  // async componentDidMount(){
-  //   const {firestore,match,history}=this.props;
-  //   let photo = await firestore.get(`photos/${match.params.id}`);
-  //   if(!photo.exists) {
-  //     history.push('/gallery')
-  //   }
-  // }
-
-  handleUpload = async (file)=>{
+  handleUpload = async (file) => {
     this.setState({
-      selectedFile:file.target.files[0]
-    })
-
-  }
-  
+      selectedFile: file.target.files[0],
+    });
+  };
+  onChangeTextInput = (text) => {
+    const numericRegex = /^([0-9]{1,100})+$/;
+    if (numericRegex.test(text)) {
+      this.setState({ shippingCharge: text });
+    }
+  };
 
   handleFormSubmit = async (values) => {
-    console.log (values)
     try {
       if (this.props.initialValues.id) {
         this.props.updatePhoto(values);
         this.props.history.push(`/gallery/${this.props.initialValues.id}`);
-
       } else {
         let createdPhoto = await this.props.createPhoto(values);
-         await this.props.uploadProfileImage2(this.state.selectedFile,createdPhoto.id)
+        await this.props.uploadPostPhoto(
+          this.state.selectedFile,
+          createdPhoto.id
+        );
         this.props.history.push(`/gallery/${createdPhoto.id}`);
-        
       }
     } catch (error) {}
   };
 
-  // fileSelectHandler=event=>{
-  //   this.setState({
-  //     selectedFile: event.target.files[0]
-
-  //   })
-  //   console.log(event.target.files[0])
-     
-  //   this.props.uploadProfileImage(event.target.files[0])
-    
-
-  // }
-
-
-  
-
   render() {
-
-    // const {title, date, location, description, takenBy }= this.state;
     const {
-    
       history,
       initialValues,
       submitting,
@@ -147,20 +111,19 @@ class GalleryForm extends Component {
     return (
       <Segment>
         <Form onSubmit={this.props.handleSubmit(this.handleFormSubmit)}>
+          {!initialValues.id && ( //existing posts cannot change photo
+            <Segment>
+              <Header sub color='black' content='Choose an image to upload' />
+              <input type='file' onChange={this.handleUpload} />
+            </Segment>
+          )}
           <Header
             sub
             color='black'
             content='Please provide the following information:'
           />
           <Field name='title' component={textInput} placeholder='Image title' />
-          <Field
-            name='date'
-            component={dateInput}
-            dateFormat='dd LLL yyyy h:mm a'
-            showTimeSelect
-            timeFormat='HH:mm'
-            placeholder='When was the picture taken'
-          />
+
           <Field
             name='location'
             component={textInput}
@@ -182,28 +145,8 @@ class GalleryForm extends Component {
           <Field
             name='editions'
             component={textInput}
-            placeholder='what are the available editions?'
+            placeholder='How many editions available?'
           />
-{/* 
-           <Label>upload your file </Label>
-                <input type="file"
-                 onChange={  this.fileSelectHandler}/> */}
-
-          {/* <Field
-            type='file'
-            onChange={this.fileSelectHandler}
-            component={uploadInput}
-            placeholder='what are the available editions?'
-          /> */}
-          {/* start segment */}
-
-          <Segment>
-          
-
-          <input type="file" onChange={this.handleUpload}/>
-            
-         
-          </Segment>
 
           <Button
             disabled={invalid || pristine || submitting}
@@ -229,7 +172,13 @@ class GalleryForm extends Component {
   }
 }
 
-export default withFirestore (connect(
-  mapStateToPropsData,
-  mapDispatchToProps
-)(reduxForm({ form: "galleryForm", validate,enableReinitialize:true })(GalleryForm)));
+export default withFirestore(
+  connect(
+    mapStateToPropsData,
+    mapDispatchToProps
+  )(
+    reduxForm({ form: "galleryForm", validate, enableReinitialize: true })(
+      GalleryForm
+    )
+  )
+);

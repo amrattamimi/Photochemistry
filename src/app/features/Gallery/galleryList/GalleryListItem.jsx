@@ -14,7 +14,7 @@ class GalleryListItem extends Component {
     const { photo } = this.props;
     return (
       <div>
-        <Card
+        <Card style={{marginLeft:"60px"}}
           image={photo.PhotoURL}
           header={
             <Segment

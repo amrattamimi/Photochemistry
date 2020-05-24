@@ -1,12 +1,14 @@
-body {
-  background-color: rgb(234, 234, 234) !important;
-}
+
 
 timepicker style
 .react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box ul.react-datepicker__time-list {
   padding-left: 0;
   padding-right: 0;
   width: 100px;
+}
+
+body {
+  background-color: rgb(234, 234, 234) !important;
 }
 
 .react-datepicker__input-container {
@@ -62,20 +64,6 @@ timepicker style
   border: none;
 } 
 
-/* end home page styles
-
-/* navbar styles */
-
-
-
-/* .ui.fixed.menu {
-  background-image: linear-gradient(
-          to bottom right,
-           #649fcc,
-           #fafa
-  ) !important;
-  
-} */
 
 
 /* image gallery  */
@@ -83,10 +71,9 @@ timepicker style
 .ui.container.main > div > div > div{
   margin-bottom: 20px 
 }
-
+/* content from navbar */
 .ui.main.container,
 .main.segment.center {
-  /* margin: auto; */
   margin-top: 8em;
 }
 
@@ -122,9 +109,7 @@ timepicker style
   border: dashed 3px #eee;
   padding-top: 30px;
   text-align: center;
-  /* min-height: 236px; */
 }
-
 .dropzone--isActive {
-  border: dashed 3px green;
+  border: dashed 2px black;
 }

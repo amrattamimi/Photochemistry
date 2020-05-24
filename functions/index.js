@@ -8,20 +8,20 @@ const admin = require('firebase-admin')
 admin.initializeApp(functions.config().firebase)
 
 
-
-exports.userFollowing = functions.firestore.document('users/{followerUid/following/{followingUid}')
-.onCreate((photo,context) =>{
+// a cloud function is created because we do not have permission to edit other people's profile or any sub collections 
+exports.userFollowing = functions.firestore.document('users/{followerUid/following/{followingUid}') //path to the user and the users they are following 
+.onCreate((photo,context) =>{ //adding context pararmeter so we have access to the params for the id 
     console.log('V1');
     const followerUid= context.params.followerUid;
     const followingUid= context.params.followingUid;
 
-    const followerDoc =admin
+    const followerDoc =admin//current user
     .firestore()
     .collection('users')
     .doc(followerUid);
 
     console.log(followerUid);
-
+// we get the current user document so we can insert it to the follower directiory in the person's they are following directory
     return followerDoc.get().then(doc =>{
         let UserData =doc.data();
         console.log({UserData});
@@ -30,7 +30,7 @@ exports.userFollowing = functions.firestore.document('users/{followerUid/followi
             PhotoURL: UserData.PhotoURL || '/assets/user.png',
             city: UserData.city || 'unknown city' 
         };
-        return admin
+        return admin //adding the files 
         .firestore()
         .collection('users')
         .doc(followingUid)
@@ -62,32 +62,4 @@ exports.userFollowing = functions.firestore.document('users/{followerUid/followi
 
 
 
-// exports.createActivity = functions.firestore
-//     .document('photos/{photoId}')
-//     .onCreate(photo =>{
-//         let newPhoto = photo.data();
-
-//         console.log(newPhoto);
-
-//         const activity={
-//             type: 'newPhoto',
-//             photoDate: newPhoto.date,
-//             hostedBy: newPhoto.hostedBy,
-//             title: newPhoto.title,
-//             photoURL: newPhoto.hostPhotoURL,
-//             timestamp: admin.firestore.FieldValue.serverTimestamp(),
-//             hostUid: newPhoto.hostUid,
-//             photoId: photo.id
-//         }
-
-//         console.log(activity)
-
-//         return admin.firestore().collection('activity')
-//         .add(activity)
-//         .then((docRef) =>{
-//             return console.log('activity created with ID ', docRef.id )
-//         })
-//         .catch((error)=>{
-//            return  console.log('error with activity ', error )
-//         })
-//     })
+//fav functions 

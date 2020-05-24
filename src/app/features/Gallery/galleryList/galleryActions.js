@@ -15,11 +15,11 @@ export const createPhoto= photo=>{
 
       try{
           let createdPhoto = await firestore.add('photos',newPhoto)// adding new photo to the photo collection( createdPhoto receives a snapshot )
-          await firestore.set(`likedBy/${createdPhoto.id}_${user.uid}`,{
-              photoId: createdPhoto.id,
-              userUid: user.uid,
-              photoDate: photo.date
-          });
+          // await firestore.set(`likedBy/${createdPhoto.id}_${user.uid}`,{
+          //     photoId: createdPhoto.id,
+          //     userUid: user.uid,
+          //     photoDate: photo.date
+          // });
           await firestore.set(`photos/${createdPhoto.id}`,{ 
           PhotoId: createdPhoto.id },{ merge: true })  
 
@@ -69,6 +69,13 @@ export const likePhoto = (photo) => {
     const firebase = getFirebase();
     const user = firebase.auth().currentUser;
     const profile = getState().firebase.profile;
+     const favourites= {
+      title: photo.title ||'Unknown title',
+      created: photo.created,
+      id: photo.id,
+      PhotoURL: photo.PhotoURL 
+
+    }
     const likedBy = {
       liked: true,
       photoURL: profile.photoURL || "https://via.placeholder.com/150",
@@ -81,21 +88,26 @@ export const likePhoto = (photo) => {
       });
   
         
-        await fireStore.set(`favs/${user.uid}`, {
-          photoId: photo.id,
-          userId: user.uid
-        });
+      await fireStore.set( //creating a new directory in users file with the following information
+        {
+          collection:'users',
+          doc: user.uid,
+          subcollections: [{collection: 'favs', doc: photo.id }]
+        },
+        favourites
+
+      );
 
     
-      await fireStore.set(`photo_likedBy/${photo.id}_${user.id}`, {
-        photoId: photo.id,
-        userUid: user.uid,
-        eventDate: photo.date,
-      });
-      toastr.success("photo liked ");
+      // await fireStore.set(`photo_likedBy/${photo.id}_${user.id}`, {
+      //   photoId: photo.id,
+      //   userUid: user.uid,
+      //   eventDate: photo.date,
+      // });
+      toastr.success("photo was added to favs ");
     } catch (error) {
       console.log(error);
-      toastr.error("unable to like photo ");
+      toastr.error("there was an error  ");
     }
   };
 };
@@ -110,12 +122,18 @@ export const unlike = (photo) => {
       await fireStore.update(`photos/${photo.id}`, {
         [`likedBy.${user.uid}`]: fireStore.FieldValue.delete(),
       });
-      await fireStore.delete(`photo_likedBy/${photo.id}_${user.id}`);
+      // await fireStore.delete(`photo_likedBy/${photo.id}_${user.id}`);
 
-      toastr.success("photo unliked ");
+      await fireStore.delete({
+        collection:'users',
+        doc: user.uid,
+        subcollections: [{collection:'favs', doc: photo.id}] //delecting the document with the photo ID 
+      })
+
+      toastr.success("Photo was removed from favs  ");
     } catch (error) {
       console.log(error);
-      toastr.error("unable to unlike photo ");
+      toastr.error(" there was an error ");
     }
   };
 };

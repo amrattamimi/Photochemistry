@@ -9,9 +9,9 @@ export class FeedListItem extends Component {
     const { photo } = this.props;
     return (
       <div style={{ padding: "20px", textAlign: "center" }}>
-        <Card
+        <Card 
           fluid
-          style={{ textAlign: "center", padding: "20px" }}
+          style={{ textAlign: "center" ,marginLeft:"120px", padding:"20px"}}
           image={photo.PhotoURL}
           header={
             <Segment

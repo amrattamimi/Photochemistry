@@ -16,7 +16,7 @@ const UserDetailedSidebar = ({ isOwner, followUser, profile, isFollowing ,unfoll
             content='Edit Profile'
           />
         )}
-        {!isOwner && !isFollowing && (
+        {!isOwner && !isFollowing && ( //buttong to follow user 
           <Button
             onClick={() => followUser(profile)}
             color='teal'
@@ -25,7 +25,7 @@ const UserDetailedSidebar = ({ isOwner, followUser, profile, isFollowing ,unfoll
             content='follow user '
           />
         )}
-        {!isOwner && isFollowing && 
+        {!isOwner && isFollowing && //button to unfollow user 
           <Button onClick={() => unfollowUser(profile)} color='teal' fluid basic content='Unfollow' />
         }
         
@@ -35,24 +35,3 @@ const UserDetailedSidebar = ({ isOwner, followUser, profile, isFollowing ,unfoll
 };
 
 export default UserDetailedSidebar;
-
-{
-  /* {isOwner? (
-        <Button
-          as={Link}
-          to='/settings'
-          color='teal'
-          fluid
-          basic
-          content='Edit Profile'
-        />
-   ) :(
-        <Button
-        onClick={() => followUser(profile)}
-          color='teal'
-          fluid
-          basic
-          content='Follow'
-        />
-        )} */
-}

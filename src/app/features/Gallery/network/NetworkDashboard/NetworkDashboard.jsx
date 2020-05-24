@@ -6,9 +6,9 @@ import { compose } from 'redux'
 import PersonCard from '../PersonCard'
 
 
-// query so we can get the followers information on the reducer 
+// query so we can get the followers and followings information on the reducer 
 const query= ({ auth }) =>{
-    return[
+    return[ 
         {
             collection: 'users' ,
             doc: auth.uid,
@@ -25,7 +25,7 @@ const query= ({ auth }) =>{
         }
     ]
 }
-const mapStateToProps= state =>({
+const mapStateToProps= state =>({ //passing downt the actions 
     followings: state.firestore.ordered.following,
     followers: state.firestore.ordered.followers,
     auth: state.firebase.auth

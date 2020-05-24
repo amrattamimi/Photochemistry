@@ -45,10 +45,9 @@ export const uploadProfileImage = (file, fileName) =>
         }
     }
 
-    export const uploadProfileImage2 = (file, fileName) => 
+    export const uploadPostPhoto = (file, fileName) => //uploads posts photos 
     
     async (dispatch, getState, {getFirebase, getFirestore}) => {
-        const imageName = cuid();
         const firebase = getFirebase();
         const firestore = getFirestore();
         const user = firebase.auth().currentUser;
@@ -78,7 +77,7 @@ export const uploadProfileImage = (file, fileName) =>
     }
 
 
-export const deletePhoto = (photo) =>
+export const deletePhoto = (photo) => //delete user photo 
     async (dispatch, getState, {getFirebase, getFirestore}) => {
         const firebase = getFirebase();
         const firestore = getFirestore();
@@ -96,7 +95,7 @@ export const deletePhoto = (photo) =>
         }
     }
 
-export const setMainPhoto = photo =>
+export const setMainPhoto = photo =>// update main photo in file 
     async (dispatch, getState, {getFirebase}) => {
         const firebase = getFirebase();
         try {

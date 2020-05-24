@@ -1,5 +1,4 @@
 import { combineReducers } from "redux";
-import testReducer from "../features/testArea/testReducer";
 import galleryReducer from "../features/Gallery/galleryList/galleryReducer";
 import {reducer as FormReducer} from 'redux-form'
 import modalReducer from "../features/modals/modalReducer";
@@ -13,7 +12,6 @@ const rootReducers = combineReducers({
 
     firebase: firebaseReducer,
     firestore:firestoreReducer,
-    test: testReducer,
     photos: galleryReducer,
     form: FormReducer,
     modals: modalReducer,

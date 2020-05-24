@@ -1,7 +1,5 @@
 import { toastr } from "react-redux-toastr";
-import { asyncStart, asyncError, asyncFinish } from "../../../async/asyncActions";
-import firebase from "../../../../config/firebase";
-import { FETCH } from "../../galleryList/galleryConstants";
+
 
 export const updateProfile = (user) => 
     async (dispatch, getState, {getFirebase}) => {
@@ -59,64 +57,9 @@ export const updateProfile = (user) =>
           }
         }
 
-        //query to get the gallery 
+       
 
-        export const getUserGallery = (userUid) => async (
-          dispatch,
-          getState
-        ) => {
-          dispatch(asyncStart());
-          const firestore = firebase.firestore()
-          const today = new Date(Date.now());
-          let photosRef = firestore.collection('photos');
-          let query = photosRef
-                .where("date", "<=", today)
-        try{
-          // let querySnap = await query.get();
-          // console.log(querySnap)
-
-          // let photos =[];
-          // for(let i=0; i<querySnap.docs.length ; i++){
-          //   let photo= await firestore.collection('photos').doc(querySnap.docs[i].data().photosId).get();
-          //   photos.push({...photo.data(), id: photo.id})
-
-          // }
-          let querySnap = await query.get();
-
-          if(querySnap.docs.length===0){ // we finish once there are no query sanp in the loop anymore 
-              dispatch(asyncFinish())
-              return querySnap;
-          }
-
-          let photos = [];
-
-          for (let i = 0; i < querySnap.docs.length; i++) {
-            let photo = { ...querySnap.docs[i].data(), id: querySnap.docs[i].id };
-            photos.push(photo);
-          }
-          dispatch({ type: FETCH, payload: { photos } });
-          dispatch(asyncFinish());
-         
-          // await firebase.firestore().collection('photos').get()
-          //   .then(querySnapshot => {
-          //     querySnapshot.docs.forEach(doc => {
-          //     photos.push(doc.data());
-          //   });
-          // });
-          // console.log(photos)
-          // // pushes documents to the reducer 
-          // dispatch({type: FETCH, payload:{photos}})
-          
-    
-          // dispatch(asyncFinish())
-
-        
-        }catch(error){
-          console.log(error)
-          dispatch(asyncError())
-
-        }}
-            
+       
 
 
   

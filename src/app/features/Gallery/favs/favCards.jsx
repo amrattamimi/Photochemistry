@@ -2,18 +2,18 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { Image, Card } from 'semantic-ui-react'
 
-const PersonCard = ({user}) => {
+const favCards = ({fav}) => {
     return (
-        <Card as={Link} to={`/profile/${user.id}`}>
-        <Image src={user.PhotoURL || '/assets/user.png'}/>
+        <Card >
+        <Image src={fav.photoURL || '/assets/user.png'}/>
         <Card.Content textAlign='center'>
-            <Card.Header content={user.displayName}/>
+            <Card.Header content={fav.title}/>
         </Card.Content>
         <Card.Meta textAlign="center">
-            <span>{user.city}</span>
+            <span>{fav.date}</span>
         </Card.Meta>
         </Card>
     )
 }
 
-export default PersonCard
+export default favCards

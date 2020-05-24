@@ -6,17 +6,35 @@ import GalleryList from "../galleryList/GalleryList";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import GalleryGroupDashboard from "./GalleryGroupDashboard";
+import favsDashboard from "../favs/favsDashboard";
+import { compose } from "redux";
+
+const query= ({ auth }) =>{
+  return[ 
+ 
+      {
+          collection: 'users' ,
+          doc: auth.uid,
+          subcollections:[{ collection:'favs'}],
+          storeAs:'favs'
+
+      }
+  ]
+}
 
 const mapStateToProps = (state) => ({
   photos: [],
-  loading: state.async.loading,
+  loadingInitial: state.async.loading,
   auth: state.firebase.auth,
+  favs: state.firestore.ordered.favs,
 });
+
+
 
 class GalleryDashboard extends Component {
   state = {
     photos: [],
-    openBar: "gallery",
+    openBar: true,
   };
 
   async componentDidMount() {
@@ -26,9 +44,7 @@ class GalleryDashboard extends Component {
     const firestore = firebase.firestore();
     if(user!=null){
     const photoQuery = firestore
-      .collection("photos")
-      // .where('liker',"array-contains",user)
-      
+      .collection("photos")      
       .where("takenByUid", "==", user)
       .orderBy("created", "desc");
     let querySnap = await photoQuery.get();
@@ -47,61 +63,58 @@ class GalleryDashboard extends Component {
 
   handleGallery = () => {
     this.setState({
-      openBar: "gallery",
+      openBar: true
     });
   };
   handleGroup = () => {
     this.setState({
-      openBar: "group",
+      openBar: false
     });
   };
 
   render() {
-    const { loading } = this.props;
+    const { loading,favs } = this.props;
     const { photos, openBar } = this.state;
+
     if (this.state.loadingInitial) return <LoadingComponent />;
     return (
       <Fragment>
         <Menu style={{ padding: "20px" }} tabular>
           <Menu.Item
-            active={openBar === "gallery"}
+            active={openBar === true}
             onClick={this.handleGallery}
             name='Gallery'
           />
 
           <Menu.Item
             onClick={this.handleGroup}
-            active={openBar === "group"}
-            name='Groups'
+            active={openBar === false}
+            name='Favourites'
           />
         </Menu>
 
         <Grid width={10}>
-          {openBar === "gallery" && (
+          {openBar === true && (
             <GalleryList
               photos={photos}
-              getNextPhotos={this.getNextPhotos}
-              loading={loading}
             />
           )}
-          {openBar === "group" && <GalleryGroupDashboard />}
+          {openBar === false &&<GalleryList photos={favs}/> }
         </Grid>
         <Loader active={loading} />
-        <Button
+        {openBar && <Button
           size='massive'
           color="instagram"
           floated="right"
           as={Link}
           to={"/createPost"}
           content='Create a new post'
-        />
+        />}
       </Fragment>
     );
   }
 }
-export default connect(mapStateToProps)(GalleryDashboard)
-;
-
+export default compose (connect(mapStateToProps), firestoreConnect(props => query(props)))(GalleryDashboard);
 // (
 //   firestoreConnect([{ collection: "photos" }])
 

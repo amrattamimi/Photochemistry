@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { Segment, Image, Item, Header, Button, List } from "semantic-ui-react";
+import { Segment, Image, Item, Header, Button, List, Icon, GridColumn } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { objectToArray } from "../../../common/utils/helpers";
 import { format } from "date-fns/esm";
@@ -12,10 +12,9 @@ const PhotoDisplay = ({
   isOwner,
   likePhoto,
   unlike,
-  authenticated
+  authenticated,
 }) => {
   return (
-    
     <Segment.Group>
       <Segment basic attached='top'>
         <Image src={`${photo.PhotoURL}`} fluid />
@@ -25,7 +24,6 @@ const PhotoDisplay = ({
             <Item>
               <Item.Content>
                 <Header style={{ fontSize: "50px", color: "#4267B2" }}>
-                 
                   - {photo.title} -
                 </Header>
                 <p>
@@ -33,21 +31,26 @@ const PhotoDisplay = ({
                   {photo.created &&
                     format(photo.created.toDate(), "EEEE do LLLL yyy")}
                 </p>
-                <p as={Link} to={`/profile/${photo.takenByUid}`}>
-                  Taken by <strong> {photo.takenBy}</strong>
-                </p>
-                <p> editions: {photo.editions}</p>
-                <List horizontal>
-                {photo.likedBy &&
-                  objectToArray(photo.likedBy).map((likedBy) => (
-                    <LikedByList key={likedBy.id} likedBy={likedBy} />
-                  ))}
-              </List>
                 <p>
-                {photo.likedBy && objectToArray(photo.likedBy).length}
-              {photo.likedBy && objectToArray(photo.likedBy).length === 1
-                ? " Person added this photo as favourite"
-                : " People added this photo as favourite"}
+                  <GridColumn style={{ color: "black"}} as={Link} to={`/profile/${photo.takenByUid}`}>
+                  Taken by <strong> {photo.takenBy}</strong>
+                
+                </GridColumn>
+                </p>
+                
+                <p> Editions: {photo.editions}</p>
+                <List horizontal>
+                  {photo.likedBy &&
+                    objectToArray(photo.likedBy).map((likedBy) => (
+                      <LikedByList key={likedBy.id} likedBy={likedBy} />
+                    ))}
+                </List>
+                <p>
+                  {photo.likedBy && objectToArray(photo.likedBy).length}
+
+                  {photo.likedBy && objectToArray(photo.likedBy).length === 1
+                    ? " Person added this photo as favourite"
+                    : " People added this photo as favourite"}
                 </p>
               </Item.Content>
             </Item>
@@ -55,20 +58,22 @@ const PhotoDisplay = ({
         </Segment>
       </Segment>
 
-
       <Segment attached='bottom' clearing>
-        {authenticated &&
-        <Fragment>
-        {hasLiked ? (
-          <Button onClick={() => unlike(photo)}>unlike </Button>
-        ) : (
-          
-          <Button onClick={() => likePhoto(photo)} color='facebook'>
-            Like this photo
-          </Button>
+        {authenticated && (
+          <Fragment>
+            {hasLiked ? (
+              <Button onClick={() => unlike(photo)}>
+            
+                Remove from favourites
+              </Button>
+            ) : (
+              <Button onClick={() => likePhoto(photo)} color='facebook'>
+             
+                Add to favourites
+              </Button>
+            )}
+          </Fragment>
         )}
-        </Fragment>
-}
 
         {isOwner && (
           <Fragment>

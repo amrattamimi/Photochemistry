@@ -4,7 +4,7 @@ import { compose } from 'redux';
 import { Grid } from 'semantic-ui-react';
 import { withFirestore, firebaseConnect, isEmpty } from 'react-redux-firebase';
 import { addPhotoComment } from '../galleryList/galleryActions';
-import { deletePhoto,likePhoto,unlike } from "../galleryList/galleryActions";
+import { fav,deletePhoto,likePhoto,unlike } from "../galleryList/galleryActions";
 import PhotoComment from './PhotoComment';
 import PhotoDisplay from './PhotoDisplay';
 import { createDataTree } from '../galleryList/helper';
@@ -40,7 +40,8 @@ const actions = {
   deletePhoto,
     likePhoto,
     unlike,
-  addPhotoComment
+  addPhotoComment,
+  fav
 };
 
 class PhotoDetailedPage extends Component {
@@ -72,7 +73,8 @@ class PhotoDetailedPage extends Component {
       photoChat,
       photo,
       likePhoto,
-      unlike
+      unlike,
+      fav
     } = this.props;
    
       const likers = photo && photo.likedBy && objectToArray(photo.likedBy)
@@ -86,7 +88,7 @@ class PhotoDetailedPage extends Component {
 
          
          <Grid.Column width={15}>
-            <PhotoDisplay authenticated ={authenticated} unlike={unlike} likePhoto={likePhoto} photo={photo} deletePhoto={this.handleDeletePhoto} isOwner={isOwner} hasLiked={hasLiked}/>
+            <PhotoDisplay authenticated ={authenticated} unlike={unlike} likePhoto={likePhoto} getFav={fav} photo={photo} deletePhoto={this.handleDeletePhoto} isOwner={isOwner} hasLiked={hasLiked}/>
         </Grid.Column>
         <Grid.Column width={15}>
           

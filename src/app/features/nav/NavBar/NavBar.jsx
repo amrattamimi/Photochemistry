@@ -48,13 +48,13 @@ class NavBar extends Component {
     return (
       <Menu  inverted fixed='top'>
         <Container>
-          <Menu.Item as={NavLink} exact to='/'header>
+          <Menu.Item >
           
             <Menu.Item>PhotoChemistry</Menu.Item>
             
           </Menu.Item>
-          <Menu.Item as={NavLink} to='/feed'name='Feed' />
-         { authenticated && <Menu.Item as={NavLink} to='/gallery'name='Gallery' />}
+          <Menu.Item as={NavLink} exact to='/'name='Explore feed' />
+          {authenticated && <Menu.Item as={NavLink} to='/gallery'name='My Gallery' />}
           {authenticated && <Menu.Item as={NavLink} to='/network'name='Network' />}
        
         {authenticated? (
