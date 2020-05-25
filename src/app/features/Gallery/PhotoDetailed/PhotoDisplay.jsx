@@ -1,10 +1,12 @@
 import React, { Fragment } from "react";
-import { Segment, Image, Item, Header, Button, List, Icon, GridColumn } from "semantic-ui-react";
+import { Segment, Image, Item, Header, Button, List, GridColumn } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { objectToArray } from "../../../common/utils/helpers";
 import { format } from "date-fns/esm";
 import LikedByList from "../galleryList/LikedByList";
 
+
+//passing down the props
 const PhotoDisplay = ({
   photo,
   deletePhoto,

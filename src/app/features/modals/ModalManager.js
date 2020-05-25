@@ -1,12 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import testModal from './testModal';
 import LoginModal from'./LoginModal';
 import RegisterModal from './RegisterModal';
 
 
 const modalLookup = {
-  testModal,
   LoginModal,
   RegisterModal
 
@@ -16,6 +14,7 @@ const mapState = state => ({
   currentModal: state.modals
 });
 
+//modal manager receives the modal as props this code is written using the help of an online course
 const ModalManager = ({ currentModal }) => {
   let renderedModal;
 

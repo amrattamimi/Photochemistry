@@ -8,12 +8,12 @@ import {connect } from 'react-redux'
 import { withFirebase } from "react-redux-firebase";
 
 
-const mapDispatchToProps =  {
+const mapDispatchToProps =  { //passing open modal action from the reducer 
   openModal
   
 }
 
-const mapStateToProps= state=>({
+const mapStateToProps= state=>({ //using the props from firebase 
   auth: state.firebase.auth,
   profile: state.firebase.profile
 
@@ -26,25 +26,25 @@ class NavBar extends Component {
  
 
   handleSignedIn=()=> {
-    this.props.openModal('LoginModal')
+    this.props.openModal('LoginModal') //passing log in modal signout component 
 
   }
 
   handleSignedOut=()=>{
-    this.props.firebase.logout()
-    this.props.history.push('/')
+    this.props.firebase.logout() //using firebase props function to log out 
+    this.props.history.push('/') //redirect user to the explore page 
   
   }
 
   handleRegister=()=>{
-    this.props.openModal('RegisterModal')
+    this.props.openModal('RegisterModal')//passing register modal to handle to sign in modal 
   }
   
 
 
   render() {
-    const {auth,profile}=this.props;
-    const authenticated = !auth.isEmpty && auth.isLoaded
+    const {auth,profile}=this.props; //passing down auth from firebase to singed in component 
+    const authenticated = !auth.isEmpty && auth.isLoaded // a check to see if the user is authenticated 
     return (
       <Menu  inverted fixed='top'>
         <Container>

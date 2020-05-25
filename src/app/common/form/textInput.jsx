@@ -8,6 +8,10 @@ const textInput = ({
     placeholder,
     meta:{touched,error}
 }) => {
+       //Form field returns an error if the field is touched and an error was made
+    //spreading the input field and pass downt the place holder 
+    // a check if the field is touched or error occured 
+    //code used is with the help of an online tutorial 
     return (
         <Form.Field error={touched &&!!error }>
             <input {...input} placeholder={placeholder} type={type}/>

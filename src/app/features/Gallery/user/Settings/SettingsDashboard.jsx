@@ -13,24 +13,24 @@ import { updateProfile } from '../UserDetailed/userActions'
 
 
 
-const mapDispatchToProps={
+const mapDispatchToProps={ //passing down actions from auth reducer 
     updateProfile,
     updatePassword
 }
 
 const mapStateToProps= state=>({
-    user: state.firebase.profile
+    user: state.firebase.profile //passing the firestored user document 
 })
 
 
-export const SettingsDashboard = ({updatePassword,user,updateProfile}) => {
+export const SettingsDashboard = ({updatePassword,user,updateProfile}) => {// passing the data as props 
     return (
         <Grid>
             <Grid.Column width ={3}>
                 <SettingsNav/>
             </Grid.Column>
             <Grid.Column width ={10}>
-                {/* <Redirect exact from='/settings' to='/settings/basic'/> */}
+                {/* in order to pass actions and props to other components we have to use route */}
                 <Route path='/settings/basic'
                  render={()=> <BasicPage initialValues={user} updateProfile={updateProfile}/>}// passing down the initial values as the user name in firestore
                  />

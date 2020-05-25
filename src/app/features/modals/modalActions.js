@@ -1,5 +1,6 @@
 import { MODAL_OPEN, MODAL_CLOSE } from "./modalConstants";
 
+//opean modal actions 
 export const openModal = (modalType, modalProps) => {
     return {
         type: MODAL_OPEN,

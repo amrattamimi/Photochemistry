@@ -1,8 +1,7 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import { Image, Card } from 'semantic-ui-react'
 
-const favCards = ({fav}) => {
+const favCards = ({fav}) => { //passing down the props from favs dashbaord 
     return (
         <Card >
         <Image src={fav.photoURL || '/assets/user.png'}/>

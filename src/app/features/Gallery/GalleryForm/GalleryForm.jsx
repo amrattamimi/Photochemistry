@@ -10,13 +10,11 @@ import {
   combineValidators,
   isRequired,
   composeValidators,
-  hasLengthGreaterThan,
   isNumeric,
 } from "revalidate";
 import { withFirestore } from "react-redux-firebase";
 import { uploadPostPhoto } from "../user/Settings/Photos/uploadActions";
 
-// import { storage } from "../../../config/firebase";
 
 const mapStateToPropsData = (state, ownProps) => {
   const photoID = ownProps.match.params.id;
@@ -43,27 +41,28 @@ const mapDispatchToProps = {
 };
 
 const category = [
-  // categories available
+  // categories available for the input
   { key: "contemporary", text: "Contemporary", value: "contemporary" },
   { key: "minimalistic", text: "Minimalistic", value: "minimalistic" },
+  { key: "conceptual", text: "Conceptual", value: "conceptual" },
   { key: "classic", text: "Classic", value: "classic" },
   { key: "black&white", text: "Black & White", value: "black & white" },
   { key: "postModern", text: "Post Modern", value: "post modern" },
   { key: "other", text: "Other", value: "other" },
 ];
 
+// composing several validators into one field 
+//allowing the validation of multiple fields at once 
 const validate = combineValidators({
   title: isRequired({ message: "the title is required" }),
   category: isRequired({ message: "category is reuiqred" }),
-  description: composeValidators(
-    isRequired({ message: "description is required" }),
-    hasLengthGreaterThan(4)({ message: "description is too short" })
-  )(),
-  location: isRequired({ message: "the city is required" }),
   editions: composeValidators(
     isRequired("editions"),
     isNumeric({ message: "this should be a number" })
   )(),
+  description:isRequired({ message: "description is required" }),
+  location: isRequired({ message: "the city is required" }),
+ 
 });
 
 class GalleryForm extends Component {
@@ -76,12 +75,7 @@ class GalleryForm extends Component {
       selectedFile: file.target.files[0],
     });
   };
-  onChangeTextInput = (text) => {
-    const numericRegex = /^([0-9]{1,100})+$/;
-    if (numericRegex.test(text)) {
-      this.setState({ shippingCharge: text });
-    }
-  };
+
 
   handleFormSubmit = async (values) => {
     try {
@@ -103,9 +97,9 @@ class GalleryForm extends Component {
     const {
       history,
       initialValues,
-      submitting,
       invalid,
       pristine,
+      submitting      
     } = this.props;
 
     return (
@@ -117,6 +111,7 @@ class GalleryForm extends Component {
               <input type='file' onChange={this.handleUpload} />
             </Segment>
           )}
+       
           <Header
             sub
             color='black'
@@ -148,14 +143,16 @@ class GalleryForm extends Component {
             placeholder='How many editions available?'
           />
 
+          
+
           <Button
-            disabled={invalid || pristine || submitting}
+            disabled={pristine || invalid ||  submitting}
             positive
             type='submit'
           >
             Submit
           </Button>
-
+           {/* the button will redirect the user to the gallery or to photo dispaly page */}
           <Button
             onClick={
               initialValues.id

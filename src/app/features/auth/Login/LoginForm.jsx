@@ -19,7 +19,7 @@ const LoginForm = ({login, handleSubmit,error} ) => {
           name="email"
           component={textInput}
           type="text"
-          placeholder="Email Address"
+          placeholder="Email"
         />
         <Field
           name="password"
@@ -27,9 +27,9 @@ const LoginForm = ({login, handleSubmit,error} ) => {
           type="password"
           placeholder="password"
         />
-        {/* catching error from submissionerror at auth reducer  */}
-        {error&&<Label basic color='red'>{error}</Label>}
-        <Button fluid size="large" color="teal">
+        {/* catching error from submission error from auth reducer  */}
+        {error&&<Label basic>{error}</Label>}
+        <Button fluid color="facebook">
           Login
         </Button>
       </Segment>

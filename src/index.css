@@ -1,5 +1,34 @@
 
+.masthead .ui.menu .ui.button,
+.ui.menu a.ui.inverted.button {
+  margin-left: 0.5em;
+}
 
+.ui.menu .item>img:not(.ui) {
+  margin-right: 1.5em !important;
+}
+
+.ui.menu:not(.vertical) .item>.button {
+  margin-left: 0.5em;
+}
+
+.ui.comments .comment .comments {
+  padding-bottom: 3em !important;
+  padding-left: 4em !important;
+}
+
+#root > div.ui.container.main > div > div{
+  margin-bottom: 1em;
+}
+
+.dropzone {
+  border: dashed 3px #eee;
+  padding-top: 30px;
+  text-align: center;
+}
+.dropzone--isActive {
+  border: dashed 2px black;
+}
 timepicker style
 .react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box ul.react-datepicker__time-list {
   padding-left: 0;
@@ -10,20 +39,6 @@ timepicker style
 body {
   background-color: rgb(234, 234, 234) !important;
 }
-
-.react-datepicker__input-container {
-  width: inherit;
-}
-
-
-
-
-.react-datepicker-wrapper {
-  width: 100%;
-}
-
-
-/*home page styles*/
 
  .masthead {
   display: flex;
@@ -64,52 +79,10 @@ body {
   border: none;
 } 
 
-
-
-/* image gallery  */
-
 .ui.container.main > div > div > div{
   margin-bottom: 20px 
 }
-/* content from navbar */
 .ui.main.container,
 .main.segment.center {
   margin-top: 8em;
-}
-
-/* .ui.center.aligned.segment.attendance-preview {
-  background-color: #fafa;
-} */
-
-.masthead .ui.menu .ui.button,
-.ui.menu a.ui.inverted.button {
-  margin-left: 0.5em;
-}
-
-.ui.menu .item>img:not(.ui) {
-  margin-right: 1.5em !important;
-}
-
-.ui.menu:not(.vertical) .item>.button {
-  margin-left: 0.5em;
-}
-
-/*chat comments*/
-.ui.comments .comment .comments {
-  padding-bottom: 3em !important;
-  padding-left: 4em !important;
-}
-
-#root > div.ui.container.main > div > div{
-  margin-bottom: 1em;
-}
-
-/* dropzone styles */
-.dropzone {
-  border: dashed 3px #eee;
-  padding-top: 30px;
-  text-align: center;
-}
-.dropzone--isActive {
-  border: dashed 2px black;
 }

@@ -1,5 +1,4 @@
 import React from 'react'
-import { Grid, Header, Segment, Card } from 'semantic-ui-react'
 import { firestoreConnect } from 'react-redux-firebase'
 import { connect } from 'react-redux'
 import { compose } from 'redux'

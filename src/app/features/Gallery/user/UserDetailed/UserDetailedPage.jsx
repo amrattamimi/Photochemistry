@@ -82,12 +82,11 @@ class UserDetailedPage extends Component {
         <UserDetailedSidebar profile={profile} followUser={followUser} isFollowing={isFollowing} isOwner={isOwner} unfollowUser={unfollowUser} />
         {photos && photos.length > 0 &&
         <UserDetailedPhotos photos={photos}/>}
-        {/* <UserDetailedFavs favs={favs} favsLoading={favsLoading}/> */}
       </Grid>
     );
   }
 }
-//passing the mat
+//passing the auth, userUId and match to the query so we can use them 
 export default compose(
   connect(mapStateToProps,mapDispatchToProps),
   firestoreConnect((auth, userUid, match) => query(auth,userUid, match))

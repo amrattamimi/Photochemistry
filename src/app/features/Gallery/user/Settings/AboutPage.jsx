@@ -4,18 +4,18 @@ import { Field, reduxForm } from 'redux-form';
 import selectIput from '../../../../common/form/selectIput';
 import textInput from '../../../../common/form/textInput';
 
-const interests = [
-  { key: 'drinks', text: 'Drinks', value: 'drinks' },
+const interests = [ //passing down the options of of interest to the interest field input 
+  { key: 'reading', text: 'Reading', value: 'reading' },
   { key: 'culture', text: 'Culture', value: 'culture' },
-  { key: 'film', text: 'Film', value: 'film' },
+  { key: 'travelling', text: 'Travelling', value: 'travelling' },
   { key: 'food', text: 'Food', value: 'food' },
-  { key: 'music', text: 'Music', value: 'music' },
-  { key: 'travel', text: 'Travel', value: 'travel' }
+  { key: 'museum', text: 'Museum', value: 'museum' },
+  { key: 'cinema', text: 'Cinema', value: 'cinema' }
 ];
 
 const AboutPage = ({ pristine, submitting, handleSubmit, updateProfile }) => {
   return (
-    <Segment>
+    <Segment style={{margin:"40px"}}>
       <Header dividing size="large" content="About Me" />
       <p>Complete your profile to get the most out of this site</p>
       <Form onSubmit={handleSubmit(updateProfile)}>
@@ -24,7 +24,7 @@ const AboutPage = ({ pristine, submitting, handleSubmit, updateProfile }) => {
         <Field name="about" component={TextArea} placeholder="About Me" />
         <Field
           name="interests"
-          component={selectIput}
+          component={selectIput} //importing the select input component 
           options={interests}
           value="interests"
           multiple={true}

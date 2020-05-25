@@ -61,5 +61,3 @@ exports.userFollowing = functions.firestore.document('users/{followerUid/followi
 
 
 
-
-//fav functions 

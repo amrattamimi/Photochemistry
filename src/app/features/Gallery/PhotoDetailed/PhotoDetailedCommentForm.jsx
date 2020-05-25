@@ -4,22 +4,19 @@ import {Field, reduxForm} from 'redux-form'
 import textDescription from '../../../common/form/textDescription';
 
 class PhotoDetailedCommentForm extends Component {
-    handleCommentSubmit = values => {
-        const {addPhotoComment, reset, photoId, closeForm, parentId} = this.props;
-        addPhotoComment(photoId, values, parentId);
+    handleCommentSubmit = values => { //passing the values to addphotocomment and closing the form
+        const {addPhotoComment, reset, photoId } = this.props; //desctructring from props
+        addPhotoComment(photoId, values);
         reset();
-        if (parentId !== 0) {
-            closeForm();
-        }
+     
     }
   render() {
     return (
         <Form onSubmit={this.props.handleSubmit(this.handleCommentSubmit)}>
-          <Field name='comment' type='text' component={textDescription} rows={2}/>
+          <Field name='comment' type='text' component={textDescription} rows={3}/>
           <Button
-            content='Add Reply'
-            icon='edit'
             primary
+            content="add a reply"
           />
         </Form>
     )

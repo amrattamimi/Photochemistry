@@ -6,19 +6,19 @@ import 'firebase/storage';
 
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDjLComyMbXyD2MEAA_Esog2jKgPKDnkwc",
-    authDomain: "photochemistry-d49d1.firebaseapp.com",
-    databaseURL: "https://photochemistry-d49d1.firebaseio.com",
-    projectId: "photochemistry-d49d1",
-    storageBucket: "photochemistry-d49d1.appspot.com",
-    messagingSenderId: "122580362925",
-    appId: "1:122580362925:web:4e8c705e81932351fb8824",
-    measurementId: "G-TDX2BYGYXM"
-  };
+  apiKey: "AIzaSyDjLComyMbXyD2MEAA_Esog2jKgPKDnkwc",
+  authDomain: "photochemistry-d49d1.firebaseapp.com",
+  databaseURL: "https://photochemistry-d49d1.firebaseio.com",
+  projectId: "photochemistry-d49d1",
+  storageBucket: "photochemistry-d49d1.appspot.com",
+  messagingSenderId: "122580362925",
+  appId: "1:122580362925:web:2a35b4a353773635fb8824",
+  measurementId: "G-LGV1C115XP"
+};
   
 
 
-  firebase.initializeApp(firebaseConfig);
+  firebase.initializeApp(firebaseConfig); 
   firebase.firestore();
 
 

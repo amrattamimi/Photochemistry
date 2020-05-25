@@ -7,7 +7,7 @@ import { addPhotoComment } from '../galleryList/galleryActions';
 import { fav,deletePhoto,likePhoto,unlike } from "../galleryList/galleryActions";
 import PhotoComment from './PhotoComment';
 import PhotoDisplay from './PhotoDisplay';
-import { createDataTree } from '../galleryList/helper';
+import { createDataTree } from './helper';
 import { objectToArray } from '../../../common/utils/helpers';
 
 
@@ -30,8 +30,8 @@ const mapState = (state, ownProps) => {
     photo,
     auth: state.firebase.auth,
     photoChat:
-      !isEmpty(state.firebase.data.photo_chat) &&
-      objectToArray(state.firebase.data.photo_chat[ownProps.match.params.id])
+      !isEmpty(state.firebase.data.photo_chat) && //check if data is is empty 
+      objectToArray(state.firebase.data.photo_chat[ownProps.match.params.id]) //matching the id of the user with the chat comment 
   };
 };
 
@@ -50,12 +50,12 @@ class PhotoDetailedPage extends Component {
 
 
    async componentDidMount(){
-    const {firestore,match,history}=this.props;
+    const {firestore,match}=this.props;
     await firestore.setListener(`photos/${match.params.id}`)
   }
 
   async componentWillUnmount(){
-    const {firestore,match,history}=this.props;
+    const {firestore,match}=this.props;
     await firestore.unsetListener(`photos/${match.params.id}`)
 
   }
@@ -76,7 +76,7 @@ class PhotoDetailedPage extends Component {
       unlike,
       fav
     } = this.props;
-   
+
       const likers = photo && photo.likedBy && objectToArray(photo.likedBy)
         const isOwner = (photo.takenByUid===auth.uid)
         const hasLiked = likers && likers.some(a=> a.id ===auth.uid)

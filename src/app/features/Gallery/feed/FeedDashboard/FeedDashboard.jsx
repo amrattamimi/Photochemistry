@@ -26,15 +26,14 @@ class FeedDashboard extends Component {
     state = {
         morePhotos: false,
         loadingInitial: true,
-        loadedPhotos: []
+        loadedPhotos: [] //when new photos received this array is updated 
       };
 
     async componentDidMount(){
-     let next = await this.props.getPhotosForFeed();
-     console.log(this.props.auth.uid)
+     let next = await this.props.getPhotosForFeed(); // 
     
 
-    if (next && next.docs && next.docs.length > 1) {
+    if (next && next.docs && next.docs.length > 1) { //if there are more docuemnts set the state to true 
         this.setState({
           morePhotos: true,
           loadingInitial: false
@@ -43,18 +42,18 @@ class FeedDashboard extends Component {
     }
   
     componentDidUpdate = prevProps => {
-      if (this.props.photos !== prevProps.photos) {
+      if (this.props.photos !== prevProps.photos) { //comparing the previous props agains the new props coming in 
         this.setState({
-          loadedPhotos: [...this.state.loadedPhotos, ...this.props.photos]
+          loadedPhotos: [...this.state.loadedPhotos, ...this.props.photos] //adding the new photos plus the new photos in the loadedphotos
         });
       }
     };
 
     getNextPhotos = async () => {
-        const { photos } = this.props;
-        let lastPhoto = photos && photos[photos.length - 1];
-        let next = await this.props.getPhotosForFeed(lastPhoto);
-        if (next && next.docs && next.docs.length <= 1) {
+        const { photos } = this.props; //get the loaded photos from the props
+        let lastPhoto = photos && photos[photos.length - 1]; //will give us the last document received 
+        let next = await this.props.getPhotosForFeed(lastPhoto); //will pass the last document to getPhotosForFeed action in the reducer 
+        if (next && next.docs && next.docs.length <= 1) { //setting the state to false 
           this.setState({
             morePhotos: false
           });

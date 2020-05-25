@@ -13,6 +13,7 @@ const closeModal = (state) => {
     return null
 }
 
+// using create reducer it can be added in the root reducer 
 export default createReducer(initialState, {
     [MODAL_OPEN]: openModal,
     [MODAL_CLOSE]: closeModal

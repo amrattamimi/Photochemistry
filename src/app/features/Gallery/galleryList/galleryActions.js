@@ -1,5 +1,4 @@
 import { toastr } from "react-redux-toastr";
-import { createNewPhoto } from "./helper";
 import firebase from "../../../config/firebase";
 import { asyncStart, asyncFinish, asyncError } from "../../async/asyncActions";
 import { FETCH } from "./galleryConstants";
@@ -10,24 +9,38 @@ export const createPhoto= photo=>{
       const firebase = getFirebase()
       const user = firebase.auth().currentUser;
       const photoURL = getState().firebase.profile.photoURL;
-      const newPhoto = createNewPhoto(user,photoURL,photo)
 
 
       try{
-          let createdPhoto = await firestore.add('photos',newPhoto)// adding new photo to the photo collection( createdPhoto receives a snapshot )
-          // await firestore.set(`likedBy/${createdPhoto.id}_${user.uid}`,{
-          //     photoId: createdPhoto.id,
-          //     userUid: user.uid,
-          //     photoDate: photo.date
-          // });
-          await firestore.set(`photos/${createdPhoto.id}`,{ 
+          let createdPhoto = await firestore.add('photos',
+          {
+            ...photo,
+            takenByUid: user.uid,
+            takenBy: user.displayName,
+            takenByPhoto: photoURL || '/assets/user.png', 
+            created: new Date(),
+            likedBy: {
+                [user.uid]:{
+                    photoURL:photoURL || '/assets/user.png',
+                    displayName: user.displayName,
+                    
+                }
+    
+            }
+    
+    
+        }
+          
+          )// adding new photo to the photo collection( createdPhoto receives a snapshot )
+      
+          await firestore.set(`photos/${createdPhoto.id}`,{  //including photo id in the directory for future reference 
           PhotoId: createdPhoto.id },{ merge: true })  
 
-          toastr.success('photo was created')
+          toastr.success('photo was created') //toastr message 
           return createdPhoto;
 
       }catch(error){
-          toastr.error("there was an error ")
+          toastr.error("there was an error ") //toastr message
           console.log(error)
 
       }
@@ -99,11 +112,7 @@ export const likePhoto = (photo) => {
       );
 
     
-      // await fireStore.set(`photo_likedBy/${photo.id}_${user.id}`, {
-      //   photoId: photo.id,
-      //   userUid: user.uid,
-      //   eventDate: photo.date,
-      // });
+    
       toastr.success("photo was added to favs ");
     } catch (error) {
       console.log(error);
@@ -122,7 +131,6 @@ export const unlike = (photo) => {
       await fireStore.update(`photos/${photo.id}`, {
         [`likedBy.${user.uid}`]: fireStore.FieldValue.delete(),
       });
-      // await fireStore.delete(`photo_likedBy/${photo.id}_${user.id}`);
 
       await fireStore.delete({
         collection:'users',
@@ -140,7 +148,8 @@ export const unlike = (photo) => {
 
 
 
-export const getPhotosForFeed = (lastPhoto) => async (dispatch, getState) => {
+export const getPhotosForFeed = (lastPhoto) => // passing last photo so we can query the last docuemnt received 
+async (dispatch, getState,{ getFirestore, getFirebase }) => {
   let today = new Date(Date.now());
   const firestore = firebase.firestore();
   const photosRef = firestore.collection("photos");
@@ -151,16 +160,16 @@ export const getPhotosForFeed = (lastPhoto) => async (dispatch, getState) => {
       (await firestore
         .collection("photos")
         .doc(lastPhoto.id)
-        .get());
-    let query;
+        .get());//the document we need to start load after 
+    let query; //we are basing the query whether or not we queried the initial load of photos or we are getting more 
 
     lastPhoto
       ? (query = photosRef
-          .where("date", "<=", today)
+          .where("date", "<=", today) //quering documents ordered from most recent 
           .orderBy("date")
-          .startAfter(startAfter)
-          .limit(2))
-      : (query = photosRef.where("date", "<=", today).orderBy("date").limit(2));
+          .startAfter(startAfter) //check if there are more photos to load 
+          .limit(3))
+      : (query = photosRef.where("date", "<=", today).orderBy("date").limit(2)); //if no more photos the last documents are returned 
 
     let querySnap = await query.get();
 
@@ -173,9 +182,9 @@ export const getPhotosForFeed = (lastPhoto) => async (dispatch, getState) => {
 
     for (let i = 0; i < querySnap.docs.length; i++) {
       let photo = { ...querySnap.docs[i].data(), id: querySnap.docs[i].id };
-      photos.push(photo);
+      photos.push(photo);//loop through the events and push them into the array 
     }
-    dispatch({ type: FETCH, payload: { photos } });
+    dispatch({ type: FETCH, payload: { photos } });//push the array to the reducer 
     dispatch(asyncFinish());
     return querySnap;
   } catch (error) {
@@ -184,33 +193,6 @@ export const getPhotosForFeed = (lastPhoto) => async (dispatch, getState) => {
   }
 };
 
-// export const getPhotosForGallery = (user) => async (dispatch, getState) => {
-//   const firestore = firebase.firestore();
-//   const photoQuery = firestore
-//       .collection("photos")
-//       .where("takenByUid", "==", user)
-//       .orderBy("created", "desc");
-// try{    
-//   dispatch(asyncStart());
-
-//   let querySnap = await photoQuery.get();
-//     console.log(querySnap);
-
-//     let photos = [];
-
-//     for (let i = 0; i < querySnap.docs.length; i++) {
-//       let photo = { ...querySnap.docs[i].data(), id: querySnap.docs[i].id };
-//       photos.push(photo);
-//     }
-//     console.log(photos)
-//     dispatch({ type: FETCH, payload: { photos } });
-//     dispatch(asyncFinish());
-//   } catch (error) {
-//     console.log(error);
-//     dispatch(asyncError());
-//   }
-
-// }
 
 
 export const addPhotoComment = (photoId, values, parentId) =>
@@ -219,7 +201,6 @@ export const addPhotoComment = (photoId, values, parentId) =>
     const profile = getState().firebase.profile;
     const user = firebase.auth().currentUser;
     let newComment = {
-      parentId: parentId,
       displayName: profile.displayName,
       photoURL: profile.photoURL || '/assets/user.png',
       uid: user.uid,
@@ -230,7 +211,7 @@ export const addPhotoComment = (photoId, values, parentId) =>
       await firebase.push(`photo_chat/${photoId}`, newComment);
     } catch (error) {
       console.log(error)
-      toastr.error('Oops', 'Problem adding comment')
+      toastr.error('there was an error')
     }
   }
 

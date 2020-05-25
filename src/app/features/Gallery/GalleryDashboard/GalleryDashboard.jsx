@@ -5,8 +5,6 @@ import { Menu, Grid, Button, Loader } from "semantic-ui-react";
 import GalleryList from "../galleryList/GalleryList";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import GalleryGroupDashboard from "./GalleryGroupDashboard";
-import favsDashboard from "../favs/favsDashboard";
 import { compose } from "redux";
 
 const query= ({ auth }) =>{
@@ -99,7 +97,7 @@ class GalleryDashboard extends Component {
               photos={photos}
             />
           )}
-          {openBar === false &&<GalleryList photos={favs}/> }
+          {openBar === false &&<GalleryList openBar={!openBar} photos={favs}/> }
         </Grid>
         <Loader active={loading} />
         {openBar && <Button
@@ -115,6 +113,5 @@ class GalleryDashboard extends Component {
   }
 }
 export default compose (connect(mapStateToProps), firestoreConnect(props => query(props)))(GalleryDashboard);
-// (
-//   firestoreConnect([{ collection: "photos" }])
+
 

@@ -1,5 +1,10 @@
 import React from 'react'
-import { Form, Label, TextArea, } from 'semantic-ui-react'
+import { Form, Label, } from 'semantic-ui-react'
+
+//Form field returns an error if the field is touched and an error was made
+    // a check if the field is touched or error occured 
+    //passing down redux props to the component
+    //code used is with the help of an online tutorial 
 
 const textDescription= ({
     input,

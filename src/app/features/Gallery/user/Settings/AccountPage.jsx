@@ -1,5 +1,5 @@
 import React from 'react';
-import { Segment, Header, Form, Divider, Label, Button, Icon } from 'semantic-ui-react';
+import { Segment, Header, Form, Divider, Label, Button } from 'semantic-ui-react';
 import { Field, reduxForm } from 'redux-form';
 import textInput from '../../../../common/form/textInput';
 import { combineValidators, isRequired, composeValidators,matchesField } from 'revalidate';
@@ -7,21 +7,22 @@ import { combineValidators, isRequired, composeValidators,matchesField } from 'r
 
 
 
-const validate= combineValidators({
+const validate= combineValidators({ // using validator from redux forms
   newPassword1: isRequired({message:'Enter your password '}),
   newPassword2 :composeValidators(
   isRequired({message: 'Please confirm your new password '}),
-   matchesField ('newPassword1')({message:'passwords do not match'})
+   matchesField ('newPassword1')({message:'passwords do not match'}) //only validate when both fields are the same 
 )()
 })
 
 const AccountPage = ({ error, invalid, submitting,handleSubmit, updatePassword }) => {
   return (
-    <Segment>
+    <Segment style={{margin:"40px"}}>
       <Header dividing size="large" content="Account" />
       <div>
-        <Header color="teal" sub content="Change password" />
+        <Header color="facebook" sub content="Change password" />
         <p>Use this form to update your account settings</p>
+        {/* passing the form information to updatepassword function in the reducer  */}
         <Form onSubmit={handleSubmit(updatePassword)}>  
           <Field
             width={8}
@@ -44,11 +45,12 @@ const AccountPage = ({ error, invalid, submitting,handleSubmit, updatePassword }
             placeholder="Confirm Password"
           />
           {error && (
-            <Label basic color="red">
+            <Label basic>
               {error}
             </Label>
           )}
           <Divider />
+           
           <Button disabled={invalid ||submitting } size="large" positive content="Update Password" />
         </Form>
       </div>

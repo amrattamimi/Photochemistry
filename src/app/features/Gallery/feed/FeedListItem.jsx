@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Segment, Button, Card, GridColumn } from "semantic-ui-react";
 import { Link } from "react-router-dom";
-import { objectToArray } from "../../../common/utils/helpers";
 import { format } from "date-fns";
 
 export class FeedListItem extends Component {

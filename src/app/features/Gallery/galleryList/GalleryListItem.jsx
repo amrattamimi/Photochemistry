@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import {
   Segment,
   Button,
@@ -11,7 +11,7 @@ import { format } from "date-fns";
 
 class GalleryListItem extends Component {
   render() {
-    const { photo } = this.props;
+    const { photo,openBar } = this.props;
     return (
       <div>
         <Card style={{marginLeft:"60px"}}
@@ -38,9 +38,12 @@ class GalleryListItem extends Component {
               </GridColumn>
             </p>
           }
-          description=''
           extra={
+            
             <span>
+              {!openBar&& //favourites do not show in the fav file 
+              <Fragment>
+              
               {photo.likedBy && objectToArray(photo.likedBy).length}
               {photo.likedBy && objectToArray(photo.likedBy).length === 1
                 ? " Person added this photo as favourite"
@@ -52,6 +55,8 @@ class GalleryListItem extends Component {
                 content='View'
                 floated='right'
               ></Button>
+              </Fragment>
+          }
             </span>
           }
         />
